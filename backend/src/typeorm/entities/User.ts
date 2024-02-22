@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, OneToMany } from "typeorm"
 import { UserAddress } from "./UserAddress"
 import { Order } from './Order'
+import { UserRoles } from "src/auth/user-roles"
 
 @Entity({ name: 'users' })
 export class User {
@@ -28,6 +29,9 @@ export class User {
 
     @Column({ type: 'date', default: new Date() })
     createdAt: Date
+
+    @Column({ type: 'enum', enum: UserRoles, default: UserRoles.User })
+    roles: UserRoles
 
     @ManyToMany(() => UserAddress)
     @JoinTable()

@@ -174,4 +174,39 @@ export class OrdersService {
         return orders;
     }
 
+    async findUserOrdersByStatus(id: number, userID: number) {
+        const user = await this.usersService.findUserById(id);
+        const orderStatus: OrderStatus = await this.ordersStatusesService.findOrderStatus(id);
+        const orders: Order[] = await this.ordersRepository.find({
+            select: {
+                orderedProducts: {
+                    quantity: true,
+                    product: {
+                        productId: true,
+                        productName: true,
+                        productPrice: true,
+                        productWeight: true,
+                        productDescription: true
+                    }
+                },
+                user: {
+                    userFirstName: true,
+                    userLastName: true,
+                    userPhone: true
+                }
+            },
+            relations: {
+                orderedProducts: {
+                    product: true
+                },
+                user: true
+            },
+            where: {
+                orderStatus: orderStatus,
+                user: user
+            }
+        });
+        return orders;
+    }
+
 }

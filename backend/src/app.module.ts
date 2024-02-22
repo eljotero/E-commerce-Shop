@@ -16,9 +16,12 @@ import { CategoriesModule } from './categories/categories.module';
 import { ProductsModule } from './products/products.module';
 import { OrdersModule } from './orders/orders.module';
 import { OrdersstatusesModule } from './ordersstatuses/ordersstatuses.module';
+import { AccessControlModule } from 'nest-access-control';
+import { roles } from './auth/user-roles';
 
 @Module({
   imports: [
+    AccessControlModule.forRoles(roles),
     ConfigModule.forRoot(), TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
