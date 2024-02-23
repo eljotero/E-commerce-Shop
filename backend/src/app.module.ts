@@ -16,12 +16,11 @@ import { CategoriesModule } from './categories/categories.module';
 import { ProductsModule } from './products/products.module';
 import { OrdersModule } from './orders/orders.module';
 import { OrdersstatusesModule } from './ordersstatuses/ordersstatuses.module';
-import { AccessControlModule } from 'nest-access-control';
-import { roles } from './auth/user-roles';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from './auth/guards/roles.guard';
 
 @Module({
   imports: [
-    AccessControlModule.forRoles(roles),
     ConfigModule.forRoot(), TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
@@ -34,6 +33,6 @@ import { roles } from './auth/user-roles';
       autoLoadEntities: true,
     }), UsersModule, AuthModule, CategoriesModule, ProductsModule, OrdersModule, OrdersstatusesModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService]
 })
 export class AppModule { }

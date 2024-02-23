@@ -4,18 +4,15 @@ import { CreateProductDto } from '../dtos/CreateProduct.dto';
 import { UpdateProductDto } from '../dtos/UpdateProduct.dto';
 import { ACGuard, UseRoles } from 'nest-access-control';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
-import { User } from 'src/typeorm/entities/User';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { UserRoles } from 'src/auth/enums/user-roles';
 
 @Controller('products')
 export class ProductsController {
     constructor(private productsService: ProductsService) { }
 
-    @UseGuards(JwtAuthGuard, ACGuard)
-    @UseRoles({
-        possession: 'any',
-        action: 'create',
-        resource: 'products'
-    })
+    @Roles(UserRoles.Admin)
+    @UseGuards(JwtAuthGuard)
     @Post()
     @UsePipes()
     createProduct(@Body(new ValidationPipe()) createProductDto: CreateProductDto) {
@@ -37,12 +34,8 @@ export class ProductsController {
         return this.productsService.findProductByName(name);
     }
 
-    @UseGuards(JwtAuthGuard, ACGuard)
-    @UseRoles({
-        possession: 'any',
-        action: 'update',
-        resource: 'products'
-    })
+    @Roles(UserRoles.Admin)
+    @UseGuards(JwtAuthGuard)
     @Put()
     @UsePipes()
     updateProduct(@Body(new ValidationPipe()) updateProductDto: UpdateProductDto) {

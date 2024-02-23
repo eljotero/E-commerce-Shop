@@ -3,19 +3,16 @@ import { CategoriesService } from '../services/categories.service';
 import { CreateCategoryDto } from '../dtos/CreateCategory.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { ACGuard, UseRoles } from 'nest-access-control';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { UserRoles } from 'src/auth/enums/user-roles';
 
 @Controller('categories')
 export class CategoriesController {
 
     constructor(private categoriesService: CategoriesService) { }
 
-    @UseGuards(JwtAuthGuard, ACGuard)
-    @UseRoles({
-        possession: 'any',
-        action: 'create',
-        resource: 'categories'
-    })
-    @Post()
+    @Roles(UserRoles.Admin)
+    @UseGuards(JwtAuthGuard)
     @UsePipes()
     createCategory(@Body(new ValidationPipe()) createCategoryDto: CreateCategoryDto) {
         return this.categoriesService.createCategory(createCategoryDto);
