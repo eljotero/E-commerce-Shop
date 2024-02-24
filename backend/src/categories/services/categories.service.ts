@@ -1,8 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Category } from 'src/typeorm/entities/Category';
+import { Category } from '../../typeorm/entities/Category';
 import { Repository, EntityManager } from 'typeorm';
 import { CreateCategoryDto } from '../dtos/CreateCategory.dto';
+import { UpdateCategoryDto } from '../dtos/UpdateCategory.dto';
+import { CANCELLED } from 'dns';
 
 @Injectable()
 export class CategoriesService {
@@ -38,7 +40,7 @@ export class CategoriesService {
             }
         });
         if (!category) {
-            throw new HttpException('There is no category with such id', HttpStatus.BAD_REQUEST);
+            throw new HttpException('There is no category with such id', HttpStatus.NOT_FOUND);
         }
         return category;
     }
@@ -50,8 +52,42 @@ export class CategoriesService {
             }
         });
         if (!category) {
-            throw new HttpException('There is no category with such name', HttpStatus.BAD_REQUEST);
+            throw new HttpException('There is no category with such name', HttpStatus.NOT_FOUND);
         }
         return category;
+    }
+
+    async updateCategoryById(id: number, updateCategoryDto: UpdateCategoryDto) {
+        return this.entityManager.transaction(async (entityManager) => {
+            const category: Category = await entityManager.findOne(Category, {
+                where: {
+                    categoryId: id
+                }
+            });
+            if (!category) {
+                throw new HttpException('There is no category with such id', HttpStatus.NOT_FOUND);
+            }
+
+            if (category.categoryName === updateCategoryDto.newCategoryName) {
+                throw new HttpException('Category already has such name', HttpStatus.BAD_REQUEST);
+            }
+            category.categoryName = updateCategoryDto.newCategoryName;
+            const updatedCategory: Category = await entityManager.save(Category, category);
+            return updatedCategory;
+        });
+    }
+
+    async deleteCategoryById(id: number) {
+        return this.entityManager.transaction(async (entityManager) => {
+            const category: Category = await entityManager.findOne(Category, {
+                where: {
+                    categoryId: id
+                }
+            });
+            if (!category) {
+                throw new HttpException('There is no category with such id', HttpStatus.NOT_FOUND);
+            }
+            await entityManager.remove(category);
+        })
     }
 }

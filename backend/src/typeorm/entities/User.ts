@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, OneToMany } from "typeorm"
 import { UserAddress } from "./UserAddress"
 import { Order } from './Order'
-import { UserRoles } from "src/auth/enums/user-roles"
+import { UserRoles } from '../../auth/enums/user-roles'
 
 @Entity({ name: 'users' })
 export class User {
