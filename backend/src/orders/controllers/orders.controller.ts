@@ -1,10 +1,9 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Post, UseGuards, ValidationPipe } from '@nestjs/common';
 import { OrdersService } from '../services/orders.service';
 import { CreateOrderDto } from '../dtos/CreateOrder.dto';
-import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
-import { ACGuard, UseRoles } from 'nest-access-control';
-import { Roles } from 'src/auth/decorators/roles.decorator';
-import { UserRoles } from 'src/auth/enums/user-roles';
+import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
+import { Roles } from '../../auth/decorators/roles.decorator';
+import { UserRoles } from '../../auth/enums/user-roles';
 
 @Controller('orders')
 export class OrdersController {
@@ -37,7 +36,7 @@ export class OrdersController {
     @Post()
     @UseGuards(JwtAuthGuard)
     createOrder(@Body(new ValidationPipe()) createOrderDto: CreateOrderDto) {
-        return this.ordersService.createOrder(createOrderDto);
+        return this.ordersService.createNewOrder(createOrderDto);
     }
 
     @Roles(UserRoles.Admin)

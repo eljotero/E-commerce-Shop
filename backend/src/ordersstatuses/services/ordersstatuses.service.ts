@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { OrderStatus, OrderStatusEnum } from 'src/typeorm/entities/OrderStatus';
+import { OrderStatus } from '../../typeorm/entities/OrderStatus';
 import { EntityManager, Repository } from 'typeorm';
 
 @Injectable()

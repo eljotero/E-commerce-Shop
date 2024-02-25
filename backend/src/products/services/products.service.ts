@@ -1,10 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Product } from 'src/typeorm/entities/Product';
+import { Product } from '../../typeorm/entities/Product';
 import { Repository, EntityManager } from 'typeorm';
 import { CreateProductDto } from '../dtos/CreateProduct.dto';
-import { CategoriesService } from 'src/categories/services/categories.service';
-import { Category } from 'src/typeorm/entities/Category';
+import { CategoriesService } from '../../categories/services/categories.service';
+import { Category } from '../../typeorm/entities/Category';
 import { UpdateProductDto } from '../dtos/UpdateProduct.dto';
 
 @Injectable()

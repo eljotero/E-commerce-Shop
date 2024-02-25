@@ -1,15 +1,15 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Order } from 'src/typeorm/entities/Order';
-import { UsersService } from 'src/users/services/users.service';
+import { Order } from '../../typeorm/entities/Order';
+import { UsersService } from '../../users/services/users.service';
 import { Repository, EntityManager } from 'typeorm';
 import { CreateOrderDto } from '../dtos/CreateOrder.dto';
-import { OrdersstatusesService } from 'src/ordersstatuses/services/ordersstatuses.service';
-import { User } from 'src/typeorm/entities/User';
-import { OrderStatus } from 'src/typeorm/entities/OrderStatus';
-import { OrderedProduct } from 'src/typeorm/entities/OrderedProduct';
-import { Product } from 'src/typeorm/entities/Product';
-import { ProductsService } from 'src/products/services/products.service';
+import { OrdersstatusesService } from '../../ordersstatuses/services/ordersstatuses.service';
+import { User } from '../../typeorm/entities/User';
+import { OrderStatus } from '../../typeorm/entities/OrderStatus';
+import { OrderedProduct } from '../../typeorm/entities/OrderedProduct';
+import { Product } from '../../typeorm/entities/Product';
+import { ProductsService } from '../../products/services/products.service';
 
 @Injectable()
 export class OrdersService {
@@ -115,7 +115,7 @@ export class OrdersService {
         return orders;
     }
 
-    async createOrder(createOrderDto: CreateOrderDto) {
+    async createNewOrder(createOrderDto: CreateOrderDto) {
         const orderStatus: OrderStatus = await this.ordersStatusesService.findOrderStatus(createOrderDto.orderStatus);
         const user: User = await this.usersService.findUserByLogin(createOrderDto.username);
         return this.entityManager.transaction(async (entityManager) => {

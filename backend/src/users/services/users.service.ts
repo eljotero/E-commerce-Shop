@@ -4,7 +4,7 @@ import { User } from '../../typeorm/entities/User'
 import { Repository, EntityManager } from 'typeorm';
 import { CreateUserDto } from 'src/users/dtos/CreateUser.dto';
 import * as bcrypt from 'bcrypt';
-import { UserAddressesService } from 'src/useraddresses/services/useraddresses.service';
+import { UserAddressesService } from '../../useraddresses/services/useraddresses.service';
 import { createUserAddressDto } from 'src/useraddresses/dtos/CreateUserAddress.dto';
 import { UpdateUserDto } from '../dtos/UpdateUser.dto';
 
