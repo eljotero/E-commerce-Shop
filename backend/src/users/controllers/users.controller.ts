@@ -1,11 +1,10 @@
-import { Controller, Get, Post, Body, ParseIntPipe, Param, UsePipes, ValidationPipe, UseGuards, Put, SetMetadata } from '@nestjs/common';
-import { ACGuard, UseRoles } from 'nest-access-control';
-import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
-import { CreateUserDto } from 'src/users/dtos/CreateUser.dto';
-import { UsersService } from 'src/users/services/users.service';
+import { Controller, Get, Post, Body, ParseIntPipe, Param, UsePipes, ValidationPipe, UseGuards, Put } from '@nestjs/common';
+import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
+import { CreateUserDto } from '../dtos/CreateUser.dto';
+import { UsersService } from '../services/users.service';
 import { UpdateUserDto } from '../dtos/UpdateUser.dto';
-import { UserRoles } from 'src/auth/enums/user-roles';
-import { Roles } from 'src/auth/decorators/roles.decorator';
+import { UserRoles } from '../../auth/enums/user-roles';
+import { Roles } from '../../auth/decorators/roles.decorator';
 
 @Controller('users')
 export class UsersController {
