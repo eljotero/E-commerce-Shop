@@ -2,10 +2,9 @@ import { Body, Controller, Get, Param, Post, Put, UseGuards, UsePipes, Validatio
 import { ProductsService } from '../services/products.service';
 import { CreateProductDto } from '../dtos/CreateProduct.dto';
 import { UpdateProductDto } from '../dtos/UpdateProduct.dto';
-import { ACGuard, UseRoles } from 'nest-access-control';
-import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
-import { Roles } from 'src/auth/decorators/roles.decorator';
-import { UserRoles } from 'src/auth/enums/user-roles';
+import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
+import { Roles } from '../../auth/decorators/roles.decorator';
+import { UserRoles } from '../../auth/enums/user-roles';
 
 @Controller('products')
 export class ProductsController {

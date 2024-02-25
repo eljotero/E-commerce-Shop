@@ -64,7 +64,7 @@ export class ProductsService {
 
     async updateProduct(updateProductDto: UpdateProductDto) {
         return this.entityManager.transaction(async (entityManager) => {
-            const productID: number = updateProductDto.productID;
+            const productID: number = updateProductDto.productId;
             const productName: string = updateProductDto.productName;
             const categoryName: string = updateProductDto.categoryName;
             const product: Product = await entityManager.findOne(Product, ({

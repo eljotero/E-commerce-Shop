@@ -5,7 +5,7 @@ export class UpdateProductDto {
     @IsNumber({}, { message: 'Please Enter Valid Product ID' })
     @IsPositive()
     @IsInt()
-    productID: number
+    productId: number
 
     @IsString({ message: 'Please Enter Valid Name' })
     productName: string;
