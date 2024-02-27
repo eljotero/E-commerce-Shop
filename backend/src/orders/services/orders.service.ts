@@ -10,6 +10,7 @@ import { OrderStatus } from '../../typeorm/entities/OrderStatus';
 import { OrderedProduct } from '../../typeorm/entities/OrderedProduct';
 import { Product } from '../../typeorm/entities/Product';
 import { ProductsService } from '../../products/services/products.service';
+import { UpdateOrderDto } from '../dtos/UpdateOrder.dto';
 
 @Injectable()
 export class OrdersService {
@@ -74,7 +75,7 @@ export class OrdersService {
             }
         });
         if (!order) {
-            throw new HttpException('There is no such order', HttpStatus.BAD_REQUEST);
+            throw new HttpException('There is no such order', HttpStatus.NOT_FOUND);
         }
         return order;
     }
@@ -207,6 +208,44 @@ export class OrdersService {
             }
         });
         return orders;
+    }
+
+    async updateOrderById(id: number, updateOrderDto: UpdateOrderDto) {
+        return this.entityManager.transaction(async (entityManager) => {
+            const order = await entityManager.findOne(Order, {
+                where: {
+                    orderId: id
+                }
+            });
+            if (!order) {
+                throw new HttpException('There is no such order', HttpStatus.NOT_FOUND);
+            }
+
+            const newOrderStatus: OrderStatus = await this.ordersStatusesService.findOrderStatus(updateOrderDto.orderStatus);
+            order.orderStatus = newOrderStatus;
+            for (const orderedProduct of updateOrderDto.orderedProducts) {
+                const product: Product = await this.productsService.findProductById(orderedProduct.productId);
+                const newOrderedProduct = new OrderedProduct();
+                newOrderedProduct.quantity = orderedProduct.quantity;
+                newOrderedProduct.product = product;
+                newOrderedProduct.order = order;
+                await entityManager.save(OrderedProduct, newOrderedProduct);
+                order.totalPrice += (newOrderedProduct.product.productPrice * newOrderedProduct.quantity);
+                order.totalWeight += (newOrderedProduct.product.productWeight * newOrderedProduct.quantity);
+            }
+            await entityManager.save(Order, order);
+        });
+    }
+
+    async changeOrderStatus(id: number, statusId: number) {
+        return this.entityManager.transaction(async (entityManager) => {
+            const order: Order = await this.findOrderByID(id);
+            const newOrderStatus = await this.ordersStatusesService.findOrderStatus(statusId);
+            if (await this.ordersStatusesService.validateOrderStatus(order.orderStatus, newOrderStatus)) {
+                order.orderStatus = newOrderStatus;
+                await entityManager.save(Order, order);
+            }
+        });
     }
 
 }

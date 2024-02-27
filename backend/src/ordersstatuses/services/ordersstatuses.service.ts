@@ -1,7 +1,8 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { OrderStatus } from '../../typeorm/entities/OrderStatus';
+import { OrderStatus, OrderStatusEnum } from '../../typeorm/entities/OrderStatus';
 import { EntityManager, Repository } from 'typeorm';
+import { Order } from 'src/typeorm/entities/Order';
 
 @Injectable()
 export class OrdersstatusesService {
@@ -21,6 +22,19 @@ export class OrdersstatusesService {
 
     async findAllOrdersStatuses() {
         return await this.ordersStatusesRepository.find();
+    }
+
+    async validateOrderStatus(orderStatus: OrderStatus, newOrderStatus: OrderStatus) {
+        if (orderStatus.status === OrderStatusEnum.DELIVERED) {
+            throw new HttpException('Order is already delivered', HttpStatus.BAD_REQUEST);
+        } else if (orderStatus.status === newOrderStatus.status) {
+            throw new HttpException('New order status is same as old order status', HttpStatus.CONFLICT);
+        } else if (orderStatus.status === OrderStatusEnum.APPROVED && newOrderStatus.status === OrderStatusEnum.UNAPPROVED) {
+            throw new HttpException('Order is already approved', HttpStatus.BAD_REQUEST);
+        } else if (orderStatus.status === OrderStatusEnum.CANCELED) {
+            throw new HttpException('Order is already canceled', HttpStatus.BAD_REQUEST);
+        }
+        return true;
     }
 
 }

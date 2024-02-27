@@ -1,9 +1,11 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, UseGuards, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, UseGuards, ValidationPipe, Request, HttpException, HttpStatus } from '@nestjs/common';
 import { OrdersService } from '../services/orders.service';
 import { CreateOrderDto } from '../dtos/CreateOrder.dto';
 import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
 import { Roles } from '../../auth/decorators/roles.decorator';
 import { UserRoles } from '../../auth/enums/user-roles';
+import { UpdateOrderDto } from '../dtos/UpdateOrder.dto';
+
 
 @Controller('orders')
 export class OrdersController {
@@ -27,14 +29,18 @@ export class OrdersController {
     @Roles(UserRoles.User)
     @UseGuards(JwtAuthGuard)
     @Get('/name/:name')
-    getUserOrders(@Param('name') name: string) {
+    getUserOrders(@Request() req, @Param('name') name: string) {
+        const authUser = req.user;
+        if (authUser.userName !== name && authUser.roles !== UserRoles.Admin) {
+            throw new HttpException('You are not authorized to view orders for this user', HttpStatus.UNAUTHORIZED);
+        }
         return this.ordersService.findUserOrders(name);
     }
 
     @Roles(UserRoles.Admin)
     @Roles(UserRoles.User)
-    @Post()
     @UseGuards(JwtAuthGuard)
+    @Post()
     createOrder(@Body(new ValidationPipe()) createOrderDto: CreateOrderDto) {
         return this.ordersService.createNewOrder(createOrderDto);
     }
@@ -50,8 +56,26 @@ export class OrdersController {
     @Roles(UserRoles.User)
     @UseGuards(JwtAuthGuard)
     @Get('/status/:id/:userID')
-    getUserOrdersByStatus(@Param('id', ParseIntPipe) id: number, @Param('userID', ParseIntPipe) userID: number) {
+    getUserOrdersByStatus(@Request() req, @Param('id', ParseIntPipe) id: number, @Param('userID', ParseIntPipe) userID: number) {
+        const authUser = req.user;
+        if (authUser.userID !== userID && authUser.roles !== UserRoles.Admin) {
+            throw new HttpException('You are not authorized to view orders for this user', HttpStatus.UNAUTHORIZED);
+        }
         return this.ordersService.findUserOrdersByStatus(id, userID);
+    }
+
+    @Roles(UserRoles.Admin)
+    @UseGuards(JwtAuthGuard)
+    @Put(':id')
+    updateOrder(@Param('id', ParseIntPipe) id: number, @Body(new ValidationPipe()) updateOrderDto: UpdateOrderDto) {
+        return this.ordersService.updateOrderById(id, updateOrderDto);
+    }
+
+    @Roles(UserRoles.Admin)
+    @UseGuards(JwtAuthGuard)
+    @Put(':id/change-status/:statusId')
+    updateOrderStatus(@Param('id') id: number, @Param('statusId') statusId: number) {
+        return this.ordersService.changeOrderStatus(id, statusId);
     }
 
 }
