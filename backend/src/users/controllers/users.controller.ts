@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, ParseIntPipe, Param, UsePipes, ValidationPipe, UseGuards, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, ParseIntPipe, Param, UsePipes, ValidationPipe, UseGuards, Put, Request, HttpException, HttpStatus} from '@nestjs/common';
 import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
 import { CreateUserDto } from '../dtos/CreateUser.dto';
 import { UsersService } from '../services/users.service';
@@ -21,7 +21,11 @@ export class UsersController {
     @Roles(UserRoles.User)
     @UseGuards(JwtAuthGuard)
     @Get(':id')
-    getUserById(@Param('id', ParseIntPipe) id: number) {
+    getUserById(@Request() req, @Param('id', ParseIntPipe) id: number) {
+        const authUser = req.user;
+        if (authUser.userID !== id && authUser.roles !== UserRoles.Admin) {
+            throw new HttpException('You are not authorized to view this user details', HttpStatus.UNAUTHORIZED);
+        }
         return this.userService.findUserById(id);
     }
 
@@ -38,7 +42,11 @@ export class UsersController {
     @UseGuards(JwtAuthGuard)
     @Put(':login')
     @UsePipes(new ValidationPipe())
-    async updateUser(@Param('login') login: string, @Body(new ValidationPipe()) updateUserDto: UpdateUserDto) {
+    async updateUser(@Request() req, @Param('login') login: string, @Body(new ValidationPipe()) updateUserDto: UpdateUserDto) {
+        const authUser = req.user;
+        if (authUser.userLogin !== login && authUser.roles !== UserRoles.Admin) {
+            throw new HttpException('You are not authorized to update this user profile', HttpStatus.UNAUTHORIZED);
+        }
         return this.userService.updateUser(login, updateUserDto);
     }
 

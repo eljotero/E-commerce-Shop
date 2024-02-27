@@ -41,7 +41,11 @@ export class OrdersController {
     @Roles(UserRoles.User)
     @UseGuards(JwtAuthGuard)
     @Post()
-    createOrder(@Body(new ValidationPipe()) createOrderDto: CreateOrderDto) {
+    createOrder(@Request() req, @Body(new ValidationPipe()) createOrderDto: CreateOrderDto) {
+        const authUser = req.user;
+        if (authUser.userName !== createOrderDto.username && authUser.roles !== UserRoles.Admin) {
+            throw new HttpException('You are not authorized to create order for such user', HttpStatus.UNAUTHORIZED);
+        }
         return this.ordersService.createNewOrder(createOrderDto);
     }
 
