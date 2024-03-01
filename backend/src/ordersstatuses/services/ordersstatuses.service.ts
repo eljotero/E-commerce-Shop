@@ -1,12 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { OrderStatus, OrderStatusEnum } from '../../typeorm/entities/OrderStatus';
-import { EntityManager, Repository } from 'typeorm';
-import { Order } from 'src/typeorm/entities/Order';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class OrdersstatusesService {
-    constructor(@InjectRepository(OrderStatus) private ordersStatusesRepository: Repository<OrderStatus>, private entityManager: EntityManager) { }
+    constructor(@InjectRepository(OrderStatus) private ordersStatusesRepository: Repository<OrderStatus>) { }
 
     async findOrderStatus(orderStatusID: number) {
         const orderStatus = await this.ordersStatusesRepository.findOne({

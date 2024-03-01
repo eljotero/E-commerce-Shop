@@ -28,7 +28,12 @@ export class ProductsService {
             if (!productCategory) {
                 throw new HttpException('Category does not exists', HttpStatus.BAD_REQUEST);
             }
-            const newProduct: Product = entityManager.create(Product, createProductDto);
+            const newProduct = new Product();
+            newProduct.category = productCategory;
+            newProduct.productDescription = createProductDto.productDescription;
+            newProduct.productName = createProductDto.productName;
+            newProduct.productPrice = createProductDto.productPrice;
+            newProduct.productWeight = createProductDto.productWeight;
             const savedProduct: Product = await entityManager.save(newProduct);
             return savedProduct;
         });
@@ -62,14 +67,13 @@ export class ProductsService {
         return product;
     }
 
-    async updateProduct(updateProductDto: UpdateProductDto) {
+    async updateProductByID(id: number, updateProductDto: UpdateProductDto) {
         return this.entityManager.transaction(async (entityManager) => {
-            const productID: number = updateProductDto.productId;
             const productName: string = updateProductDto.productName;
             const categoryName: string = updateProductDto.categoryName;
             const product: Product = await entityManager.findOne(Product, ({
                 where: {
-                    productId: productID
+                    productId: id
                 }
             }));
             if (!product) {
@@ -86,6 +90,20 @@ export class ProductsService {
             product.category = productCategory;
             const updatedProduct: Product = await entityManager.save(product);
             return updatedProduct;
+        });
+    }
+
+    async deleteProductById(id: number) {
+        return this.entityManager.transaction(async (entityManager) => {
+            const product: Product = await entityManager.findOne(Product, {
+                where: {
+                    productId: id
+                }
+            });
+            if (!product) {
+                throw new HttpException('There is no such product', HttpStatus.NOT_FOUND);
+            }
+            await entityManager.remove(Product, product);
         });
     }
 }

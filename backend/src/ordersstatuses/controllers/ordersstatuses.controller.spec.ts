@@ -31,6 +31,6 @@ describe('OrdersstatusesController', () => {
       const result = await controller.getAllOrdersStatuses();
       expect(mockOrdersStatusesService.findAllOrdersStatuses).toHaveBeenCalled();
       expect(result).toEqual([mockOrdersStatuses]);
-    })
-  })
+    });
+  });
 });

@@ -2,11 +2,6 @@ import { IsDecimal, IsInt, IsNumber, IsPositive, IsString } from "class-validato
 
 export class UpdateProductDto {
 
-    @IsNumber({}, { message: 'Please Enter Valid Product ID' })
-    @IsPositive()
-    @IsInt()
-    productId: number
-
     @IsString({ message: 'Please Enter Valid Name' })
     productName: string;
 

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, UseGuards, ValidationPipe, Request, HttpException, HttpStatus } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, UseGuards, ValidationPipe, Request, HttpException, HttpStatus, Query } from '@nestjs/common';
 import { OrdersService } from '../services/orders.service';
 import { CreateOrderDto } from '../dtos/CreateOrder.dto';
 import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
@@ -29,12 +29,12 @@ export class OrdersController {
     @Roles(UserRoles.User)
     @UseGuards(JwtAuthGuard)
     @Get('/name/:name')
-    getUserOrders(@Request() req, @Param('name') name: string) {
+    getUserOrders(@Request() req, @Param('name') name: string, @Query('orderStatusID', ParseIntPipe) orderStatusID: number) {
         const authUser = req.user;
         if (authUser.userName !== name && authUser.roles !== UserRoles.Admin) {
             throw new HttpException('You are not authorized to view orders for this user', HttpStatus.UNAUTHORIZED);
         }
-        return this.ordersService.findUserOrders(name);
+        return this.ordersService.findUserOrders(name, orderStatusID);
     }
 
     @Roles(UserRoles.Admin)
@@ -54,18 +54,6 @@ export class OrdersController {
     @Get('/status/:id')
     getOrdersByStatus(@Param('id', ParseIntPipe) id: number) {
         return this.ordersService.findOrdersByStatus(id);
-    }
-
-    @Roles(UserRoles.Admin)
-    @Roles(UserRoles.User)
-    @UseGuards(JwtAuthGuard)
-    @Get('/status/:id/:userID')
-    getUserOrdersByStatus(@Request() req, @Param('id', ParseIntPipe) id: number, @Param('userID', ParseIntPipe) userID: number) {
-        const authUser = req.user;
-        if (authUser.userID !== userID && authUser.roles !== UserRoles.Admin) {
-            throw new HttpException('You are not authorized to view orders for this user', HttpStatus.UNAUTHORIZED);
-        }
-        return this.ordersService.findUserOrdersByStatus(id, userID);
     }
 
     @Roles(UserRoles.Admin)

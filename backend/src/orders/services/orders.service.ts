@@ -80,36 +80,71 @@ export class OrdersService {
         return order;
     }
 
-    async findUserOrders(userName: string) {
+    async findUserOrders(userName: string, orderStatusID: number) {
         const user = await this.usersService.findUserByLogin(userName);
-        const orders = await this.ordersRepository.find({
-            select: {
-                orderedProducts: {
-                    quantity: true,
-                    product: {
-                        productId: true,
-                        productName: true,
-                        productPrice: true,
-                        productWeight: true,
-                        productDescription: true
+        let orders: Order[];
+        if (orderStatusID) {
+            const orderStatus: OrderStatus = await this.ordersStatusesService.findOrderStatus(orderStatusID);
+            orders = await this.ordersRepository.find({
+                select: {
+                    orderedProducts: {
+                        quantity: true,
+                        product: {
+                            productId: true,
+                            productName: true,
+                            productPrice: true,
+                            productWeight: true,
+                            productDescription: true
+                        }
+                    },
+                    user: {
+                        userFirstName: true,
+                        userLastName: true,
+                        userPhone: true
                     }
                 },
-                user: {
-                    userFirstName: true,
-                    userLastName: true,
-                    userPhone: true
-                }
-            },
-            relations: {
-                orderedProducts: {
-                    product: true
+                relations: {
+                    orderedProducts: {
+                        product: true
+                    },
+                    user: true
                 },
-                user: true
-            },
-            where: {
-                user: user
-            }
-        });
+                where: {
+                    user: user,
+                    orderStatus: orderStatus
+                }
+            });
+        } else {
+            orders = await this.ordersRepository.find({
+                select: {
+                    orderedProducts: {
+                        quantity: true,
+                        product: {
+                            productId: true,
+                            productName: true,
+                            productPrice: true,
+                            productWeight: true,
+                            productDescription: true
+                        }
+                    },
+                    user: {
+                        userFirstName: true,
+                        userLastName: true,
+                        userPhone: true
+                    }
+                },
+                relations: {
+                    orderedProducts: {
+                        product: true
+                    },
+                    user: true
+                },
+                where: {
+                    user: user,
+
+                }
+            });
+        }
         if (orders.length < 1) {
             throw new HttpException('User has no orders', HttpStatus.NOT_FOUND);
         }
@@ -118,7 +153,7 @@ export class OrdersService {
 
     async createNewOrder(createOrderDto: CreateOrderDto) {
         const orderStatus: OrderStatus = await this.ordersStatusesService.findOrderStatus(createOrderDto.orderStatus);
-        const user: User = await this.usersService.findUserByLogin(createOrderDto.username);
+        const user: User = await this.usersService.findUserForOrder(createOrderDto.username);
         return this.entityManager.transaction(async (entityManager) => {
             const order = new Order();
             order.user = user;
@@ -175,41 +210,6 @@ export class OrdersService {
         return orders;
     }
 
-    async findUserOrdersByStatus(id: number, userID: number) {
-        const user = await this.usersService.findUserById(id);
-        const orderStatus: OrderStatus = await this.ordersStatusesService.findOrderStatus(id);
-        const orders: Order[] = await this.ordersRepository.find({
-            select: {
-                orderedProducts: {
-                    quantity: true,
-                    product: {
-                        productId: true,
-                        productName: true,
-                        productPrice: true,
-                        productWeight: true,
-                        productDescription: true
-                    }
-                },
-                user: {
-                    userFirstName: true,
-                    userLastName: true,
-                    userPhone: true
-                }
-            },
-            relations: {
-                orderedProducts: {
-                    product: true
-                },
-                user: true
-            },
-            where: {
-                orderStatus: orderStatus,
-                user: user
-            }
-        });
-        return orders;
-    }
-
     async updateOrderById(id: number, updateOrderDto: UpdateOrderDto) {
         return this.entityManager.transaction(async (entityManager) => {
             const order = await entityManager.findOne(Order, {
@@ -239,7 +239,11 @@ export class OrdersService {
 
     async changeOrderStatus(id: number, statusId: number) {
         return this.entityManager.transaction(async (entityManager) => {
-            const order: Order = await this.findOrderByID(id);
+            const order: Order = await entityManager.findOne(Order, {
+                where: {
+                    orderId: id
+                }
+            });
             const newOrderStatus = await this.ordersStatusesService.findOrderStatus(statusId);
             if (await this.ordersStatusesService.validateOrderStatus(order.orderStatus, newOrderStatus)) {
                 order.orderStatus = newOrderStatus;

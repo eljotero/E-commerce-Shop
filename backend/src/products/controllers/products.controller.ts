@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, UseGuards, UsePipes, ValidationPipe, Delete } from '@nestjs/common';
 import { ProductsService } from '../services/products.service';
 import { CreateProductDto } from '../dtos/CreateProduct.dto';
 import { UpdateProductDto } from '../dtos/UpdateProduct.dto';
@@ -35,9 +35,16 @@ export class ProductsController {
 
     @Roles(UserRoles.Admin)
     @UseGuards(JwtAuthGuard)
-    @Put()
+    @Put(':id')
     @UsePipes()
-    updateProduct(@Body(new ValidationPipe()) updateProductDto: UpdateProductDto) {
-        return this.productsService.updateProduct(updateProductDto);
+    updateProduct(@Param('id', ParseIntPipe) id: number, @Body(new ValidationPipe()) updateProductDto: UpdateProductDto) {
+        return this.productsService.updateProductByID(id, updateProductDto);
+    }
+
+    @Roles(UserRoles.Admin)
+    @UseGuards(JwtAuthGuard)
+    @Delete(':id')
+    deleteProduct(@Param('id', ParseIntPipe) id: number) {
+        return this.productsService.deleteProductById(id);
     }
 }

@@ -40,6 +40,19 @@ export class UsersService {
         if (!user) {
             throw new HttpException('There is no such user', HttpStatus.BAD_REQUEST);
         }
+        const { userPassword, ...newUser } = user;
+        return newUser;
+    }
+
+    async findUserForOrder(login: string) {
+        const user: User = await this.userRepository.findOne({
+            where: {
+                userLogin: login
+            }
+        });
+        if (!user) {
+            throw new HttpException('There is no such user', HttpStatus.BAD_REQUEST);
+        }
         return user;
     }
 
@@ -59,7 +72,13 @@ export class UsersService {
                 ...userDetailsWithoutPassword,
                 userPassword: hashedPassword
             };
-            const newUser: User = entityManager.create(User, newUserData);
+            const newUser = new User();
+            newUser.userPassword = newUserData.userPassword;
+            newUser.userLogin = newUserData.userLogin;
+            newUser.userFirstName = newUserData.userFirstName;
+            newUser.userLastName = newUserData.userLastName;
+            newUser.userEmail = newUserData.userEmail;
+            newUser.userPhone = newUserData.userPhone;
             const addressData: createUserAddressDto = {
                 zipCode, city, country, address
             }
@@ -78,7 +97,6 @@ export class UsersService {
             const user = await this.findUserByLogin(login);
             Object.assign(user, userDetails);
             entityManager.save;
-        })
-
+        });
     }
 }
