@@ -45,10 +45,11 @@ describe('ProductsController', () => {
         ...dto
       }
     }),
-    findAllProducts: jest.fn().mockResolvedValueOnce([mockProducts]),
+    findAllProducts: jest.fn().mockResolvedValueOnce(mockProducts),
     findProductById: jest.fn().mockResolvedValueOnce(mockProduct),
     findProductByName: jest.fn().mockResolvedValueOnce(mockProduct),
-    updateProduct: jest.fn()
+    updateProductByID: jest.fn(),
+    deleteProductById: jest.fn().mockResolvedValueOnce({ status: 'done' })
   }
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -76,7 +77,7 @@ describe('ProductsController', () => {
         productWeight: 2.99,
         categoryName: 'IT'
       });
-      expect(mockProductsService.addProduct).toHaveBeenCalled();
+      expect(mockProductsService.addProduct).toHaveBeenCalledWith(dto);
     })
   });
 
@@ -84,14 +85,14 @@ describe('ProductsController', () => {
     it('should get all products', async () => {
       const result = await controller.getAllProducts();
       expect(mockProductsService.findAllProducts).toHaveBeenCalled();
-      expect(result).toEqual([mockProducts]);
+      expect(result).toEqual(mockProducts);
     })
   });
 
   describe('getProductById', () => {
     it('should get product by id', async () => {
       const result = await controller.getProductById(mockProduct.productId);
-      expect(mockProductsService.findProductById).toHaveBeenCalled();
+      expect(mockProductsService.findProductById).toHaveBeenCalledWith(mockProduct.productId);
       expect(result).toEqual(mockProduct);
     })
   });
@@ -99,7 +100,7 @@ describe('ProductsController', () => {
   describe('getProductByName', () => {
     it('should get product by name', async () => {
       const result = await controller.getProductByName(mockProduct.productName);
-      expect(mockProductsService.findProductByName).toHaveBeenCalled();
+      expect(mockProductsService.findProductByName).toHaveBeenCalledWith(mockProduct.productName);
       expect(result).toEqual(mockProduct);
     })
   });
@@ -108,10 +109,18 @@ describe('ProductsController', () => {
     it('should update product', async () => {
       const updatedProduct = { ...mockProduct, productDescription: 'updated product description' };
       const product = { updatedProductDescription: 'updated product description' };
-      mockProductsService.updateProduct = jest.fn().mockResolvedValueOnce(updatedProduct);
-      const result = await controller.updateProduct(product as unknown as UpdateProductDto);
-      expect(mockProductsService.updateProduct).toHaveBeenCalled();
+      mockProductsService.updateProductByID = jest.fn().mockResolvedValueOnce(updatedProduct);
+      const result = await controller.updateProduct(mockProduct.productId, product as unknown as UpdateProductDto);
+      expect(mockProductsService.updateProductByID).toHaveBeenCalledWith(mockProduct.productId, product as unknown as UpdateProductDto);
       expect(result).toEqual(updatedProduct);
+    })
+  });
+
+  describe('deleteProduct', () => {
+    it('should delete product', async () => {
+      const result = await controller.deleteProduct(mockProduct.productId);
+      expect(mockProductsService.deleteProductById).toHaveBeenCalledWith(mockProduct.productId);
+      expect(result).toEqual({ status: 'done' });
     })
   })
 });

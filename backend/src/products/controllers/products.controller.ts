@@ -1,17 +1,18 @@
-import { Body, Controller, Get, Param, Post, Put, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, UseGuards, UsePipes, ValidationPipe, Delete } from '@nestjs/common';
 import { ProductsService } from '../services/products.service';
 import { CreateProductDto } from '../dtos/CreateProduct.dto';
 import { UpdateProductDto } from '../dtos/UpdateProduct.dto';
 import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
 import { Roles } from '../../auth/decorators/roles.decorator';
 import { UserRoles } from '../../auth/enums/user-roles';
+import { RolesGuard } from '../../auth/guards/roles.guard';
 
 @Controller('products')
 export class ProductsController {
     constructor(private productsService: ProductsService) { }
 
     @Roles(UserRoles.Admin)
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Post()
     @UsePipes()
     createProduct(@Body(new ValidationPipe()) createProductDto: CreateProductDto) {
@@ -24,7 +25,7 @@ export class ProductsController {
     }
 
     @Get(':id')
-    getProductById(@Param('id') id: number) {
+    getProductById(@Param('id', ParseIntPipe) id: number) {
         return this.productsService.findProductById(id);
     }
 
@@ -34,10 +35,17 @@ export class ProductsController {
     }
 
     @Roles(UserRoles.Admin)
-    @UseGuards(JwtAuthGuard)
-    @Put()
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Put(':id')
     @UsePipes()
-    updateProduct(@Body(new ValidationPipe()) updateProductDto: UpdateProductDto) {
-        return this.productsService.updateProduct(updateProductDto);
+    updateProduct(@Param('id', ParseIntPipe) id: number, @Body(new ValidationPipe()) updateProductDto: UpdateProductDto) {
+        return this.productsService.updateProductByID(id, updateProductDto);
+    }
+
+    @Roles(UserRoles.Admin)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Delete(':id')
+    deleteProduct(@Param('id', ParseIntPipe) id: number) {
+        return this.productsService.deleteProductById(id);
     }
 }

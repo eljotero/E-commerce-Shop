@@ -7,7 +7,7 @@ describe('UsersController', () => {
   let controller: UsersController;
 
   const mockUsers = [{
-    userId: 1,
+    userID: 1,
     userLogin: 'testLogin',
     userFirstName: 'testFirstName',
     userLastName: 'testLastName',
@@ -16,7 +16,7 @@ describe('UsersController', () => {
     userPhone: '123456789'
   },
   {
-    userId: 2,
+    userID: 2,
     userLogin: 'testLogin2',
     userFirstName: 'testFirstName2',
     userLastName: 'testLastName2',
@@ -61,15 +61,18 @@ describe('UsersController', () => {
       const result = await controller.getUsers();
       expect(mockUsersService.findUsers).toHaveBeenCalled();
       expect(result).toEqual(mockUsers);
-    })
+    });
   });
 
   describe('getUserById', () => {
     it('should get user by id', async () => {
-      const result = await controller.getUserById(mockUser.userId);
+      const mockReq = {
+        user: mockUser
+      }
+      const result = await controller.getUserById(mockReq, mockUser.userId);
       expect(mockUsersService.findUserById).toHaveBeenCalled();
       expect(result).toEqual(mockUser)
-    })
+    });
   });
 
   describe('createUser', () => {
@@ -100,11 +103,14 @@ describe('UsersController', () => {
         address: 'Test 5'
       });
       expect(mockUsersService.createUser).toHaveBeenCalled();
-    })
+    });
   });
 
   describe('updateUser', () => {
     it('should update user', async () => {
+      const mockReq = {
+        user: mockUser
+      }
       const updatedUser = { ...mockUser, userLogin: 'newUserLogin' };
       const user = {
         userFirstName: 'testFirstName3',
@@ -118,9 +124,9 @@ describe('UsersController', () => {
         address: 'Test 5'
       };
       mockUsersService.updateUser = jest.fn().mockResolvedValueOnce(updatedUser);
-      const result = await controller.updateUser(mockUser.userLogin, user as UpdateUserDto);
+      const result = await controller.updateUser(mockReq, mockUser.userLogin, user as UpdateUserDto);
       expect(mockUsersService.updateUser).toHaveBeenCalled();
       expect(result).toEqual(updatedUser);
-    })
-  })
+    });
+  });
 });

@@ -51,7 +51,7 @@ describe('CategoriesController', () => {
       })
       expect(mockCategoriesService.createCategory).toHaveBeenCalledWith(dto);
     })
-  })
+  });
 
   describe('getAllCategories', () => {
     it('should get all categories', async () => {
@@ -59,7 +59,7 @@ describe('CategoriesController', () => {
       expect(mockCategoriesService.findAllCategories).toHaveBeenCalled();
       expect(result).toEqual([mockCategories]);
     })
-  })
+  });
 
   describe('getCategoryById', () => {
     it('should get category by id', async () => {
@@ -67,7 +67,7 @@ describe('CategoriesController', () => {
       expect(mockCategoriesService.findCategoryById).toHaveBeenCalled();
       expect(result).toEqual(mockCategory);
     })
-  })
+  });
 
   describe('getCategoryByName', () => {
     it('should get category by name', async () => {
@@ -75,7 +75,7 @@ describe('CategoriesController', () => {
       expect(mockCategoriesService.findCategoryByName).toHaveBeenCalled();
       expect(result).toEqual(mockCategory);
     })
-  })
+  });
 
   describe('updateCategory', () => {
     it('should update category', async () => {
@@ -86,7 +86,7 @@ describe('CategoriesController', () => {
       expect(mockCategoriesService.updateCategoryById).toHaveBeenCalled();
       expect(result).toEqual(updatedCategory);
     })
-  })
+  });
 
   describe('deleteCategory', () => {
     it('should delete category', async () => {
@@ -94,6 +94,6 @@ describe('CategoriesController', () => {
       expect(mockCategoriesService.deleteCategoryById).toHaveBeenCalled();
       expect(result).toEqual({ status: 'done' });
     })
-  })
+  });
 
 });

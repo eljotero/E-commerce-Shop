@@ -4,7 +4,6 @@ import { Category } from '../../typeorm/entities/Category';
 import { Repository, EntityManager } from 'typeorm';
 import { CreateCategoryDto } from '../dtos/CreateCategory.dto';
 import { UpdateCategoryDto } from '../dtos/UpdateCategory.dto';
-import { CANCELLED } from 'dns';
 
 @Injectable()
 export class CategoriesService {
@@ -13,7 +12,7 @@ export class CategoriesService {
 
     async createCategory(createCategoryDto: CreateCategoryDto) {
         return this.entityManager.transaction(async (entityManager) => {
-            const categoryName = createCategoryDto.categoryName;
+            const categoryName: string = createCategoryDto.categoryName;
             const category: Category = await entityManager.findOne(Category, {
                 where: {
                     categoryName: categoryName

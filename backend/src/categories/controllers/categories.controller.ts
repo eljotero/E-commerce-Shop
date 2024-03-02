@@ -1,19 +1,21 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Put, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CategoriesService } from '../services/categories.service';
 import { CreateCategoryDto } from '../dtos/CreateCategory.dto';
 import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
 import { Roles } from '../../auth/decorators/roles.decorator';
 import { UserRoles } from '../../auth/enums/user-roles';
 import { UpdateCategoryDto } from '../dtos/UpdateCategory.dto';
+import { RolesGuard } from '../../auth/guards/roles.guard';
 
 @Controller('categories')
 export class CategoriesController {
 
     constructor(private categoriesService: CategoriesService) { }
 
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(UserRoles.Admin)
-    @UseGuards(JwtAuthGuard)
     @UsePipes()
+    @Post()
     createCategory(@Body(new ValidationPipe()) createCategoryDto: CreateCategoryDto) {
         return this.categoriesService.createCategory(createCategoryDto);
     }
@@ -34,14 +36,14 @@ export class CategoriesController {
     }
 
     @Roles(UserRoles.Admin)
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Put(':id')
     updateCategory(@Param('id', ParseIntPipe) id: number, @Body(new ValidationPipe()) updateCategoryDto: UpdateCategoryDto) {
         return this.categoriesService.updateCategoryById(id, updateCategoryDto);
     }
 
     @Roles(UserRoles.Admin)
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Delete(':id')
     deleteCategory(@Param('id', ParseIntPipe) id: number) {
         return this.categoriesService.deleteCategoryById(id);

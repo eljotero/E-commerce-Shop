@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { OrdersstatusesService } from './services/ordersstatuses.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { OrderStatus } from 'src/typeorm/entities/OrderStatus';
+import { OrderStatus } from '../typeorm/entities/OrderStatus';
 import { OrdersstatusesController } from './controllers/ordersstatuses.controller';
 
 @Module({
