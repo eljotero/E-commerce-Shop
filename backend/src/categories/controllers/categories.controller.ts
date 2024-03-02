@@ -13,7 +13,7 @@ export class CategoriesController {
     constructor(private categoriesService: CategoriesService) { }
 
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles(UserRoles.Admin)
+    @Roles(UserRoles.Admin, UserRoles.Root)
     @UsePipes()
     @Post()
     createCategory(@Body(new ValidationPipe()) createCategoryDto: CreateCategoryDto) {
@@ -35,15 +35,15 @@ export class CategoriesController {
         return this.categoriesService.findCategoryByName(name);
     }
 
-    @Roles(UserRoles.Admin)
     @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(UserRoles.Admin, UserRoles.Root)
     @Put(':id')
     updateCategory(@Param('id', ParseIntPipe) id: number, @Body(new ValidationPipe()) updateCategoryDto: UpdateCategoryDto) {
         return this.categoriesService.updateCategoryById(id, updateCategoryDto);
     }
 
-    @Roles(UserRoles.Admin)
     @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(UserRoles.Admin, UserRoles.Root)
     @Delete(':id')
     deleteCategory(@Param('id', ParseIntPipe) id: number) {
         return this.categoriesService.deleteCategoryById(id);

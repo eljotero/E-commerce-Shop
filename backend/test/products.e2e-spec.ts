@@ -10,6 +10,7 @@ describe('ProductsController (e2e)', () => {
     let app: INestApplication;
     let authTokenAdmin: string;
     let authTokenUser: string;
+    let authTokenRoot: string;
 
     const productData = {
         productName: 'testProduct3',
@@ -83,6 +84,14 @@ describe('ProductsController (e2e)', () => {
         categoryName: 'food'
     };
 
+    const productData10 = {
+        productName: 'testProduct1999',
+        productDescription: 'test product description',
+        productPrice: 44.44,
+        productWeight: 55.55,
+        categoryName: 'food'
+    };
+
     const updateProductData = {
         productName: 'testProduct8',
         productDescription: 'test productdescription',
@@ -114,9 +123,13 @@ describe('ProductsController (e2e)', () => {
             "username": "testLogin",
             "password": "test123"
         });
+        const authResponseRoot = await (request(app.getHttpServer())).post(`/auth/login`).send({
+            "username": "testUser8",
+            "password": "test123"
+        });
         authTokenAdmin = authResponseAdmin.body.accessToken;
         authTokenUser = authResponseUser.body.accessToken;
-
+        authTokenRoot = authResponseRoot.body.accessToken;
     });
 
     afterAll(async () => {
@@ -126,6 +139,9 @@ describe('ProductsController (e2e)', () => {
     describe('Creating product POST /products', () => {
         it('should create a new product', () => {
             return request(app.getHttpServer()).post('/products').set('Authorization', `Bearer ${authTokenAdmin}`).send(productData).expect(HttpStatus.CREATED);
+        });
+        it('should create a new product', () => {
+            return request(app.getHttpServer()).post('/products').set('Authorization', `Bearer ${authTokenRoot}`).send(productData10).expect(HttpStatus.CREATED);
         });
         it('should not create a new product', () => {
             return request(app.getHttpServer()).post('/products').set('Authorization', `Bearer ${authTokenUser}`).send(productData).expect(HttpStatus.FORBIDDEN);
@@ -191,6 +207,19 @@ describe('ProductsController (e2e)', () => {
             expect(updateProductData.productDescription).toEqual(resBody.productDescription);
             expect(updateProductData.productName).toEqual(resBody.productName);
         });
+        it('should update product by id', async () => {
+            const product = (await request(app.getHttpServer()).get(`/products/name/${productData10.productName}`)).body;
+            const productID = product.productId;
+            const res = request(app.getHttpServer()).put(`/products/${productID}`).set('Authorization', `Bearer ${authTokenRoot}`).send(updateProductData);
+            const resBody = (await res).body;
+            res.expect(HttpStatus.OK);
+            expect(updateProductData.categoryName).toEqual(resBody.category.categoryName);
+            expect(updateProductData.productWeight).toEqual(resBody.productWeight);
+            expect(updateProductData.productPrice).toEqual(resBody.productPrice);
+            expect(updateProductData.productPrice).toEqual(resBody.productPrice);
+            expect(updateProductData.productDescription).toEqual(resBody.productDescription);
+            expect(updateProductData.productName).toEqual(resBody.productName);
+        });
         it('should not update product by id', async () => {
             const product = (await request(app.getHttpServer()).get(`/products/name/${updateProductData.productName}`)).body;
             const productID = product.productId;
@@ -209,6 +238,13 @@ describe('ProductsController (e2e)', () => {
             request(app.getHttpServer()).delete(`/products/${productID}`).set('Authorization', `Bearer ${authTokenAdmin}`).expect(HttpStatus.OK);
             request(app.getHttpServer()).get(`/products/name/${productData2.productName}`).expect(HttpStatus.NOT_FOUND);
         });
+        it('should delete product by id', async () => {
+            await request(app.getHttpServer()).post('/products').set('Authorization', `Bearer ${authTokenRoot}`).send(productData2);
+            const product = (await request(app.getHttpServer()).get(`/products/name/${productData2.productName}`).expect(HttpStatus.OK));
+            const productID = product.body.productId;
+            request(app.getHttpServer()).delete(`/products/${productID}`).set('Authorization', `Bearer ${authTokenRoot}`).expect(HttpStatus.OK);
+            request(app.getHttpServer()).get(`/products/name/${productData2.productName}`).expect(HttpStatus.NOT_FOUND);
+        });
         it('should not delete product by id', () => {
             return request(app.getHttpServer()).delete(`/products/${1}`).set('Authorization', `Bearer ${authTokenUser}`).expect(HttpStatus.FORBIDDEN);
         });
@@ -224,8 +260,16 @@ describe('ProductsController (e2e)', () => {
                 productName: productData.productName
             }
         });
+        const product2 = await entityManager.findOne(Product, {
+            where: {
+                productName: productData10.productName
+            }
+        });
         if (product) {
             await entityManager.remove(Product, product);
+        }
+        if (product2) {
+            await entityManager.remove(Product, product2);
         }
     }
 });

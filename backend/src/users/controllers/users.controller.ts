@@ -11,15 +11,15 @@ import { RolesGuard } from '../../auth/guards/roles.guard';
 export class UsersController {
     constructor(private userService: UsersService) { }
 
-    @Roles(UserRoles.Admin)
     @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(UserRoles.Admin, UserRoles.User, UserRoles.Root)
     @Get()
     getUsers() {
         return this.userService.findUsers();
     }
 
-    @Roles(UserRoles.Admin, UserRoles.User)
     @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(UserRoles.Admin, UserRoles.User, UserRoles.Root)
     @Get(':id')
     getUserById(@Request() req, @Param('id', ParseIntPipe) id: number) {
         const authUser = req.user;
@@ -29,15 +29,15 @@ export class UsersController {
         return this.userService.findUserById(id);
     }
 
-    @Roles(UserRoles.Admin, UserRoles.User)
+    @Roles(UserRoles.Admin, UserRoles.User, UserRoles.Root)
     @Post()
     @UsePipes(new ValidationPipe())
     async createUser(@Body(new ValidationPipe()) createUserDto: CreateUserDto) {
         return this.userService.createUser(createUserDto);
     }
 
-    @Roles(UserRoles.Admin, UserRoles.User)
     @UseGuards(JwtAuthGuard)
+    @Roles(UserRoles.Admin, UserRoles.User, UserRoles.Root)
     @Put(':login')
     @UsePipes(new ValidationPipe())
     async updateUser(@Request() req, @Param('login') login: string, @Body(new ValidationPipe()) updateUserDto: UpdateUserDto) {

@@ -9,8 +9,7 @@ import { UserRoles } from '../enums/user-roles';
 export class AuthController {
     constructor(private authService: AuthService) { }
 
-    @Roles(UserRoles.Admin)
-    @Roles(UserRoles.User)
+    @Roles(UserRoles.Admin, UserRoles.User, UserRoles.Root)
     @Post('login')
     @UseGuards(LocalGuard)
     @UsePipes(new ValidationPipe())
