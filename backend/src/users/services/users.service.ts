@@ -44,7 +44,7 @@ export class UsersService {
         return newUser;
     }
 
-    async findUserForOrder(login: string) {
+    async findUser(login: string) {
         const user: User = await this.userRepository.findOne({
             where: {
                 userLogin: login

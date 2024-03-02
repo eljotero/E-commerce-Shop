@@ -5,13 +5,14 @@ import { UpdateProductDto } from '../dtos/UpdateProduct.dto';
 import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
 import { Roles } from '../../auth/decorators/roles.decorator';
 import { UserRoles } from '../../auth/enums/user-roles';
+import { RolesGuard } from '../../auth/guards/roles.guard';
 
 @Controller('products')
 export class ProductsController {
     constructor(private productsService: ProductsService) { }
 
     @Roles(UserRoles.Admin)
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Post()
     @UsePipes()
     createProduct(@Body(new ValidationPipe()) createProductDto: CreateProductDto) {
@@ -24,7 +25,7 @@ export class ProductsController {
     }
 
     @Get(':id')
-    getProductById(@Param('id') id: number) {
+    getProductById(@Param('id', ParseIntPipe) id: number) {
         return this.productsService.findProductById(id);
     }
 
@@ -34,7 +35,7 @@ export class ProductsController {
     }
 
     @Roles(UserRoles.Admin)
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Put(':id')
     @UsePipes()
     updateProduct(@Param('id', ParseIntPipe) id: number, @Body(new ValidationPipe()) updateProductDto: UpdateProductDto) {
@@ -42,7 +43,7 @@ export class ProductsController {
     }
 
     @Roles(UserRoles.Admin)
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Delete(':id')
     deleteProduct(@Param('id', ParseIntPipe) id: number) {
         return this.productsService.deleteProductById(id);

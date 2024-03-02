@@ -153,7 +153,7 @@ export class OrdersService {
 
     async createNewOrder(createOrderDto: CreateOrderDto) {
         const orderStatus: OrderStatus = await this.ordersStatusesService.findOrderStatus(createOrderDto.orderStatus);
-        const user: User = await this.usersService.findUserForOrder(createOrderDto.username);
+        const user: User = await this.usersService.findUser(createOrderDto.username);
         return this.entityManager.transaction(async (entityManager) => {
             const order = new Order();
             order.user = user;

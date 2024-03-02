@@ -22,11 +22,15 @@ export class ProductsService {
                 }
             }))
             if (product) {
-                throw new HttpException('Product already exists', HttpStatus.BAD_REQUEST);
+                throw new HttpException('Product already exists', HttpStatus.CONFLICT);
             }
-            const productCategory: Category = await this.categoriesService.findCategoryByName(categoryName);
+            const productCategory: Category = await entityManager.findOne(Category, ({
+                where: {
+                    categoryName: categoryName
+                }
+            }));
             if (!productCategory) {
-                throw new HttpException('Category does not exists', HttpStatus.BAD_REQUEST);
+                throw new HttpException('There is no category with such name', HttpStatus.NOT_FOUND);
             }
             const newProduct = new Product();
             newProduct.category = productCategory;
@@ -34,8 +38,20 @@ export class ProductsService {
             newProduct.productName = createProductDto.productName;
             newProduct.productPrice = createProductDto.productPrice;
             newProduct.productWeight = createProductDto.productWeight;
-            const savedProduct: Product = await entityManager.save(newProduct);
-            return savedProduct;
+            await entityManager.save(newProduct);
+            return await entityManager.findOne(Product, ({
+                where: {
+                    productName: productName
+                },
+                select: {
+                    category: {
+                        categoryName: true
+                    }
+                },
+                relations: {
+                    category: true
+                }
+            }));
         });
     }
 
@@ -47,10 +63,17 @@ export class ProductsService {
         const product: Product = await this.productRepository.findOne({
             where: {
                 productName: productName
+            }, select: {
+                category: {
+                    categoryName: true
+                }
+            },
+            relations: {
+                category: true
             }
         });
         if (!product) {
-            throw new HttpException('There is no such product', HttpStatus.BAD_REQUEST);
+            throw new HttpException('There is no such product', HttpStatus.NOT_FOUND);
         }
         return product;
     }
@@ -59,10 +82,17 @@ export class ProductsService {
         const product: Product = await this.productRepository.findOne({
             where: {
                 productId: productID
+            }, select: {
+                category: {
+                    categoryName: true
+                }
+            },
+            relations: {
+                category: true
             }
         });
         if (!product) {
-            throw new HttpException('There is no such product', HttpStatus.BAD_REQUEST);
+            throw new HttpException('There is no such product', HttpStatus.NOT_FOUND);
         }
         return product;
     }
@@ -77,11 +107,15 @@ export class ProductsService {
                 }
             }));
             if (!product) {
-                throw new HttpException('There is no such product', HttpStatus.BAD_REQUEST);
+                throw new HttpException('There is no such product', HttpStatus.NOT_FOUND);
             }
-            const productCategory: Category = await this.categoriesService.findCategoryByName(categoryName);
+            const productCategory: Category = await entityManager.findOne(Category, ({
+                where: {
+                    categoryName: categoryName
+                }
+            }));
             if (!productCategory) {
-                throw new HttpException('Category does not exists', HttpStatus.BAD_REQUEST);
+                throw new HttpException('Category does not exists', HttpStatus.NOT_FOUND);
             }
             product.productName = productName;
             product.productDescription = updateProductDto.productDescription;

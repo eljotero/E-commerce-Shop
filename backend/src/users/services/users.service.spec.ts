@@ -110,9 +110,9 @@ describe('UsersService', () => {
     });
   });
 
-  describe('findUserForOrder', () => {
+  describe('findUser', () => {
     it('should find user for order', async () => {
-      const result = await service.findUserForOrder(mockUser.userLogin);
+      const result = await service.findUser(mockUser.userLogin);
       expect(mockUserRepository.findOne).toHaveBeenCalled();
       expect(result).toEqual(mockUser);
     });

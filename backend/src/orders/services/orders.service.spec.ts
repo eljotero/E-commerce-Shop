@@ -57,7 +57,7 @@ describe('OrdersService', () => {
 
   let mockUsersService = {
     findUserByLogin: jest.fn(),
-    findUserForOrder: jest.fn()
+    findUser: jest.fn()
   }
 
   let mockOrdersStatusesService = {
@@ -142,7 +142,7 @@ describe('OrdersService', () => {
       };
       await service.createNewOrder(dto);
       expect(mockOrdersStatusesService.findOrderStatus).toHaveBeenCalledWith(dto.orderStatus);
-      expect(mockUsersService.findUserForOrder).toHaveBeenCalledWith(dto.username);
+      expect(mockUsersService.findUser).toHaveBeenCalledWith(dto.username);
       expect(mockEntityManager.transaction).toHaveBeenCalled();
       expect(mockProductsService.findProductById).toHaveBeenCalled();
       expect(mockEntityManager.save).toHaveBeenCalled();

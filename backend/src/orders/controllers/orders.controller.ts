@@ -5,6 +5,7 @@ import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
 import { Roles } from '../../auth/decorators/roles.decorator';
 import { UserRoles } from '../../auth/enums/user-roles';
 import { UpdateOrderDto } from '../dtos/UpdateOrder.dto';
+import { RolesGuard } from '../../auth/guards/roles.guard';
 
 
 @Controller('orders')
@@ -13,21 +14,21 @@ export class OrdersController {
     }
 
     @Roles(UserRoles.Admin)
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Get()
     getAllOrders() {
         return this.ordersService.findAllOrders()
     }
 
     @Roles(UserRoles.Admin)
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Get(':id')
     getOrderById(@Param('id', ParseIntPipe) id: number) {
         return this.ordersService.findOrderByID(id);
     }
 
-    @Roles(UserRoles.Admin)
-    @Roles(UserRoles.User)
-    @UseGuards(JwtAuthGuard)
+    @Roles(UserRoles.Admin, UserRoles.User)
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Get('/name/:name')
     getUserOrders(@Request() req, @Param('name') name: string, @Query('orderStatusID', ParseIntPipe) orderStatusID: number) {
         const authUser = req.user;
@@ -37,9 +38,8 @@ export class OrdersController {
         return this.ordersService.findUserOrders(name, orderStatusID);
     }
 
-    @Roles(UserRoles.Admin)
-    @Roles(UserRoles.User)
-    @UseGuards(JwtAuthGuard)
+    @Roles(UserRoles.Admin, UserRoles.User)
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Post()
     createOrder(@Request() req, @Body(new ValidationPipe()) createOrderDto: CreateOrderDto) {
         const authUser = req.user;
@@ -50,21 +50,21 @@ export class OrdersController {
     }
 
     @Roles(UserRoles.Admin)
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Get('/status/:id')
     getOrdersByStatus(@Param('id', ParseIntPipe) id: number) {
         return this.ordersService.findOrdersByStatus(id);
     }
 
     @Roles(UserRoles.Admin)
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Put(':id')
     updateOrder(@Param('id', ParseIntPipe) id: number, @Body(new ValidationPipe()) updateOrderDto: UpdateOrderDto) {
         return this.ordersService.updateOrderById(id, updateOrderDto);
     }
 
     @Roles(UserRoles.Admin)
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Put(':id/change-status/:statusId')
     updateOrderStatus(@Param('id') id: number, @Param('statusId') statusId: number) {
         return this.ordersService.changeOrderStatus(id, statusId);

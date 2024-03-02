@@ -26,7 +26,7 @@ describe('UsersController', () => {
   }];
 
   const mockUser = {
-    userID: 3,
+    userId: 3,
     userLogin: 'testLogin3',
     userFirstName: 'testFirstName3',
     userLastName: 'testLastName3',
@@ -69,7 +69,7 @@ describe('UsersController', () => {
       const mockReq = {
         user: mockUser
       }
-      const result = await controller.getUserById(mockReq, mockUser.userID);
+      const result = await controller.getUserById(mockReq, mockUser.userId);
       expect(mockUsersService.findUserById).toHaveBeenCalled();
       expect(result).toEqual(mockUser)
     });
