@@ -19,7 +19,7 @@ function Navbar() {
                     <span style={{ '--i': 6 } as React.CSSProperties}>T</span>
                     <span style={{ '--i': 7 } as React.CSSProperties}>R</span>
                     <span style={{ '--i': 8 } as React.CSSProperties}>E</span>
-                    <span style={{ '--i': 9 } as React.CSSProperties}>A</span>
+                    <span style={{ '--i': 9} as React.CSSProperties}>A</span>
                     <span style={{ '--i': 10 } as React.CSSProperties}>T</span>
                     <span style={{ '--i': 11 } as React.CSSProperties}>S</span>
 

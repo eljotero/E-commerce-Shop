@@ -61,15 +61,15 @@
     position: relative;
     display: inline-block;
     text-transform: uppercase;
-    animation: waviy 1s infinite;
+    animation: waviy 5s infinite linear;
     animation-delay: calc(.1s * var(--i));
 }
 
   @keyframes waviy {
-    0%,40%,100% {
+    0%, 20% {
       transform: translateY(0)
     }
-    20% {
+    10% {
       transform: translateY(-20px)
     }
   }
