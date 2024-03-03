@@ -1,0 +1,59 @@
+
+
+.NavbarContainer {
+    margin-top: 50px;
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    align-items: center;
+    background-color: #fff;
+    width: 100%;
+}
+
+.NavbarSectionCenter .NavbarSectionLeft .NavbarSectionRight {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.NavbarSectionCenter span {
+    position: relative;
+    font-size: 35px;
+    text-transform: uppercase;
+    font-family: 'Roboto', monospace;
+}
+
+.NavbarSectionLeft button, .NavbarSectionRight button {
+    position: relative;
+    font-size: 20px;
+    text-transform: uppercase;
+    font-family: 'Roboto', monospace;
+    margin-inline: 20px;
+    border: none;
+    cursor: pointer;
+    background-color: #fff;
+}
+
+.SearchButton, .AccountButton, .CartButton{
+    width: 24px;
+    height: 24px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+.SearchButton {
+    background-image: url('../assets/search.ico');
+}
+
+.AccountButton {
+    background-image: url('../assets/account.ico');
+
+}
+
+.CartButton {
+    background-image: url('../assets/cart.ico');
+
+}
+
+
+

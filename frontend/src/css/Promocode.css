@@ -2,6 +2,7 @@
 .PromoCodeContainer {
     background-color: #FFEED8;
     text-align: center;
+    justify-content: space-between;
     padding: 10px;
     white-space: nowrap;
     overflow: hidden;
@@ -9,6 +10,7 @@
 
 .PromoCodeText {
     display: inline-block;
+    margin-left: 40px;
     font-size: 24px;
     font-family: 'Roboto', monospace;
     animation: move 10s linear infinite;

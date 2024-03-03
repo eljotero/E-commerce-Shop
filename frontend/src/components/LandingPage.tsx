@@ -1,10 +1,15 @@
 import Promocode from "./Promocode";
+import Navbar from "./Navbar";
 
 function LandingPage() {
   
 
     return (
-        <Promocode />
+        <>
+            <Promocode />
+            <Navbar />
+            
+        </>
     );
 
 }

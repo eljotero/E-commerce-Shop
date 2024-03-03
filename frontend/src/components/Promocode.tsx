@@ -3,7 +3,8 @@ import '../css/Promocode.css';
 function Promocode() {
     return (
         <div className='PromoCodeContainer'>
-            <span className='PromoCodeText'>Get free shipping on orders over $50 with code SWEETSHIP</span>
+            <span className='PromoCodeText'>Get free candy samples with orders over $100. Code: SWEETSHIP</span>
+            
         </div>
     )
 }
