@@ -1,0 +1,20 @@
+
+.PromoCodeContainer {
+    background-color: #FFEED8;
+    text-align: center;
+    padding: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.PromoCodeText {
+    display: inline-block;
+    font-size: 24px;
+    font-family: 'Roboto', monospace;
+    animation: move 10s linear infinite;
+}
+
+@keyframes move {
+    0% { transform: translateX(200%); }
+    100% { transform: translateX(-200%); }
+}

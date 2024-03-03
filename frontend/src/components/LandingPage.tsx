@@ -1,5 +1,11 @@
+import Promocode from "./Promocode";
+
 function LandingPage() {
   
+
+    return (
+        <Promocode />
+    );
 
 }
 
