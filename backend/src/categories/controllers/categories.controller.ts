@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Put, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CategoriesService } from '../services/categories.service';
 import { CreateCategoryDto } from '../dtos/CreateCategory.dto';
 import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
@@ -11,9 +11,10 @@ export class CategoriesController {
 
     constructor(private categoriesService: CategoriesService) { }
 
-    @Roles(UserRoles.Admin)
-    @UseGuards(JwtAuthGuard)
+    //@Roles(UserRoles.Admin)
+    //@UseGuards(JwtAuthGuard)
     @UsePipes()
+    @Post()
     createCategory(@Body(new ValidationPipe()) createCategoryDto: CreateCategoryDto) {
         return this.categoriesService.createCategory(createCategoryDto);
     }

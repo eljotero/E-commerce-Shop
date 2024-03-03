@@ -10,8 +10,8 @@ import { Roles } from '../../auth/decorators/roles.decorator';
 export class UsersController {
     constructor(private userService: UsersService) { }
 
-    @Roles(UserRoles.Admin)
-    @UseGuards(JwtAuthGuard)
+    //@Roles(UserRoles.Admin)
+    //@UseGuards(JwtAuthGuard)
     @Get()
     getUsers() {
         return this.userService.findUsers();
@@ -20,7 +20,7 @@ export class UsersController {
     @Roles(UserRoles.Admin)
     @Roles(UserRoles.User)
     @UseGuards(JwtAuthGuard)
-    @Get(':id')
+    @Get(':id') 
     getUserById(@Request() req, @Param('id', ParseIntPipe) id: number) {
         const authUser = req.user;
         if (authUser.userID !== id && authUser.roles !== UserRoles.Admin) {

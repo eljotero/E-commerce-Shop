@@ -10,8 +10,8 @@ import { UserRoles } from '../../auth/enums/user-roles';
 export class ProductsController {
     constructor(private productsService: ProductsService) { }
 
-    @Roles(UserRoles.Admin)
-    @UseGuards(JwtAuthGuard)
+    //@Roles(UserRoles.Admin)
+    //@UseGuards(JwtAuthGuard)
     @Post()
     @UsePipes()
     createProduct(@Body(new ValidationPipe()) createProductDto: CreateProductDto) {
