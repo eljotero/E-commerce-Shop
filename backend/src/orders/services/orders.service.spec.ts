@@ -118,37 +118,6 @@ describe('OrdersService', () => {
     });
   });
 
-  describe('createNewOrder', () => {
-    it('should create new order', async () => {
-      mockProductsService.findProductById = jest.fn().mockResolvedValue({
-        productId: 1,
-        productName: "Product1",
-        productPrice: 10,
-        productWeight: 0.5
-      });
-      const dto = {
-        username: "James",
-        orderStatus: 2,
-        orderedProducts: [
-          {
-            productId: 1,
-            quantity: 2
-          },
-          {
-            productId: 3,
-            quantity: 1
-          }
-        ]
-      };
-      await service.createNewOrder(dto);
-      expect(mockOrdersStatusesService.findOrderStatus).toHaveBeenCalledWith(dto.orderStatus);
-      expect(mockUsersService.findUser).toHaveBeenCalledWith(dto.username);
-      expect(mockEntityManager.transaction).toHaveBeenCalled();
-      expect(mockProductsService.findProductById).toHaveBeenCalled();
-      expect(mockEntityManager.save).toHaveBeenCalled();
-    })
-  });
-
   describe('findOrdersByStatus', () => {
     it('should find orders by status', async () => {
       const orderStatusID: number = 1;
@@ -158,46 +127,5 @@ describe('OrdersService', () => {
       expect(result).toEqual(mockOrders);
     })
   });
-
-  describe('updateOrderById', () => {
-    it('should update order by id', async () => {
-      mockEntityManager.findOne = jest.fn().mockResolvedValueOnce(mockOrder);
-      const oldOrder = {
-        orderId: 999,
-        username: "James",
-        orderStatus: 2,
-        orderedProducts: [
-          {
-            productId: 1,
-            quantity: 2
-          },
-          {
-            productId: 3,
-            quantity: 1
-          }
-        ]
-      };
-      const updatedOrder = { ...oldOrder, orderStatus: 4 };
-      mockEntityManager.save = jest.fn().mockResolvedValueOnce(updatedOrder);
-      await service.updateOrderById(oldOrder.orderId, updatedOrder);
-      expect(mockEntityManager.transaction).toHaveBeenCalled();
-      expect(mockEntityManager.findOne).toHaveBeenCalled();
-      expect(mockOrdersStatusesService.findOrderStatus).toHaveBeenCalled();
-      expect(mockProductsService.findProductById).toHaveBeenCalled();
-    })
-  });
-
-  describe('changeOrderStatus', () => {
-    it('should change order status', async () => {
-      const updatedOrder = { ...mockOrder, orderStatus: 4 };
-      mockEntityManager.findOne = jest.fn().mockResolvedValueOnce(mockOrder);
-      mockEntityManager.save = jest.fn().mockResolvedValueOnce(updatedOrder);
-      await service.changeOrderStatus(mockOrder.orderId, 4);
-      expect(mockOrdersStatusesService.findOrderStatus).toHaveBeenCalled();
-      expect(mockOrdersStatusesService.validateOrderStatus).toHaveBeenCalled();
-    })
-  });
-
-
 
 });

@@ -11,7 +11,7 @@ import { RolesGuard } from '../../auth/guards/roles.guard';
 export class ProductsController {
     constructor(private productsService: ProductsService) { }
 
-    @Roles(UserRoles.Admin)
+    @Roles(UserRoles.Admin, UserRoles.Root)
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Post()
     @UsePipes()
@@ -34,7 +34,7 @@ export class ProductsController {
         return this.productsService.findProductByName(name);
     }
 
-    @Roles(UserRoles.Admin)
+    @Roles(UserRoles.Admin, UserRoles.Root)
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Put(':id')
     @UsePipes()
@@ -42,7 +42,7 @@ export class ProductsController {
         return this.productsService.updateProductByID(id, updateProductDto);
     }
 
-    @Roles(UserRoles.Admin)
+    @Roles(UserRoles.Admin, UserRoles.Root)
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Delete(':id')
     deleteProduct(@Param('id', ParseIntPipe) id: number) {

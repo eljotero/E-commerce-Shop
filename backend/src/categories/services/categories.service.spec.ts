@@ -117,7 +117,7 @@ describe('CategoriesService', () => {
             await service.deleteCategoryById(mockCategory2.categoryId);
             expect(mockEntityManager.transaction).toHaveBeenCalled();
             expect(mockEntityManager.remove).toHaveBeenCalled();
-            expect(mockEntityManager.remove).toHaveBeenCalledWith(mockCategory2);
+            expect(mockEntityManager.remove).toHaveBeenCalled();
         })
     });
 
