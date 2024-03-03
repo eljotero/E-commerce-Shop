@@ -6,7 +6,7 @@ import { Repository, EntityManager } from 'typeorm';
 import { CreateOrderDto } from '../dtos/CreateOrder.dto';
 import { OrdersstatusesService } from '../../ordersstatuses/services/ordersstatuses.service';
 import { User } from '../../typeorm/entities/User';
-import { OrderStatus } from '../../typeorm/entities/OrderStatus';
+import { OrderStatus, OrderStatusEnum } from '../../typeorm/entities/OrderStatus';
 import { OrderedProduct } from '../../typeorm/entities/OrderedProduct';
 import { Product } from '../../typeorm/entities/Product';
 import { ProductsService } from '../../products/services/products.service';
@@ -62,13 +62,17 @@ export class OrdersService {
                     userFirstName: true,
                     userLastName: true,
                     userPhone: true
+                },
+                orderStatus: {
+                    orderStatusId: true
                 }
             },
             relations: {
                 orderedProducts: {
                     product: true
                 },
-                user: true
+                user: true,
+                orderStatus: true
             },
             where: {
                 orderId: orderID
@@ -101,13 +105,17 @@ export class OrdersService {
                         userFirstName: true,
                         userLastName: true,
                         userPhone: true
+                    },
+                    orderStatus: {
+                        status: true
                     }
                 },
                 relations: {
                     orderedProducts: {
                         product: true
                     },
-                    user: true
+                    user: true,
+                    orderStatus: true
                 },
                 where: {
                     user: user,
@@ -162,7 +170,14 @@ export class OrdersService {
             order.totalWeight = 0;
             await entityManager.save(Order, order);
             for (const orderedProductData of createOrderDto.orderedProducts) {
-                const product: Product = await this.productsService.findProductById(orderedProductData.productId);
+                const product: Product = await entityManager.findOne(Product, {
+                    where: {
+                        productId: orderedProductData.productId
+                    }
+                });
+                if (!product) {
+                    throw new HttpException('There is no such product', HttpStatus.NOT_FOUND);
+                }
                 const orderedProduct = new OrderedProduct();
                 orderedProduct.quantity = orderedProductData.quantity;
                 orderedProduct.product = product;
@@ -174,6 +189,13 @@ export class OrdersService {
                 );
                 await entityManager.save(Order, order);
             }
+            return {
+                orderStatus: orderStatus.status,
+                totalPrice: order.totalPrice,
+                totalWeight: order.totalWeight,
+                orderId: order.orderId,
+                orderDate: order.orderDate
+            };
         });
     }
 
@@ -221,35 +243,107 @@ export class OrdersService {
                 throw new HttpException('There is no such order', HttpStatus.NOT_FOUND);
             }
 
-            const newOrderStatus: OrderStatus = await this.ordersStatusesService.findOrderStatus(updateOrderDto.orderStatus);
+            const newOrderStatus: OrderStatus = await entityManager.findOne(OrderStatus, {
+                where: {
+                    orderStatusId: updateOrderDto.orderStatus
+                }
+            });
+            if (!newOrderStatus) {
+                throw new HttpException('There is no such order status', HttpStatus.NOT_FOUND);
+            }
             order.orderStatus = newOrderStatus;
             for (const orderedProduct of updateOrderDto.orderedProducts) {
-                const product: Product = await this.productsService.findProductById(orderedProduct.productId);
+                const product: Product = await entityManager.findOne(Product, {
+                    where: {
+                        productId: orderedProduct.productId
+                    }
+                });
+                if (!product) {
+                    throw new HttpException('There is no such product', HttpStatus.NOT_FOUND);
+                }
                 const newOrderedProduct = new OrderedProduct();
                 newOrderedProduct.quantity = orderedProduct.quantity;
                 newOrderedProduct.product = product;
                 newOrderedProduct.order = order;
                 await entityManager.save(OrderedProduct, newOrderedProduct);
+                order.totalPrice = 0;
+                order.totalWeight = 0;
                 order.totalPrice += (newOrderedProduct.product.productPrice * newOrderedProduct.quantity);
                 order.totalWeight += (newOrderedProduct.product.productWeight * newOrderedProduct.quantity);
             }
             await entityManager.save(Order, order);
+            return {
+                orderStatus: newOrderStatus.status,
+                totalPrice: order.totalPrice,
+                totalWeight: order.totalWeight,
+                orderId: order.orderId,
+                orderDate: order.orderDate
+            };
         });
     }
 
     async changeOrderStatus(id: number, statusId: number) {
         return this.entityManager.transaction(async (entityManager) => {
             const order: Order = await entityManager.findOne(Order, {
+                select: {
+                    orderStatus: {
+                        status: true
+                    }
+                },
                 where: {
                     orderId: id
+                },
+                relations: {
+                    orderStatus: true
                 }
             });
-            const newOrderStatus = await this.ordersStatusesService.findOrderStatus(statusId);
-            if (await this.ordersStatusesService.validateOrderStatus(order.orderStatus, newOrderStatus)) {
+            if (!order) {
+                throw new HttpException('There is no such order', HttpStatus.NOT_FOUND);
+            }
+            const newOrderStatus: OrderStatus = await entityManager.findOne(OrderStatus, {
+                where: {
+                    orderStatusId: statusId
+                }
+            });
+            if (!newOrderStatus) {
+                throw new HttpException('There is no such order status', HttpStatus.NOT_FOUND);
+            }
+            if (this.validateOrderStatus(order.orderStatus, newOrderStatus)) {
                 order.orderStatus = newOrderStatus;
                 await entityManager.save(Order, order);
             }
         });
+    }
+
+    async deleteOrderById(id: number) {
+        return this.entityManager.transaction(async (entityManager) => {
+            const order: Order = await entityManager.findOne(Order, {
+                where: {
+                    orderId: id
+                },
+                relations: ['orderedProducts']
+            });
+            if (!order) {
+                throw new HttpException('There is no such order', HttpStatus.NOT_FOUND);
+            }
+            for (const orderedProduct of order.orderedProducts) {
+                await entityManager.remove(OrderedProduct, orderedProduct);
+            }
+            await entityManager.remove(Order, order);
+        });
+    }
+
+    validateOrderStatus(orderStatus: OrderStatus, newOrderStatus: OrderStatus) {
+        if (orderStatus.status === OrderStatusEnum.DELIVERED) {
+            throw new HttpException('Order is already delivered', HttpStatus.BAD_REQUEST);
+        } else if (orderStatus.status === newOrderStatus.status) {
+            throw new HttpException('New order status is same as old order status', HttpStatus.CONFLICT);
+        } else if (orderStatus.status === OrderStatusEnum.APPROVED && newOrderStatus.status === OrderStatusEnum.UNAPPROVED) {
+            throw new HttpException('Order is already approved', HttpStatus.BAD_REQUEST);
+        } else if (orderStatus.status === OrderStatusEnum.CANCELED) {
+            throw new HttpException('Order is already canceled', HttpStatus.BAD_REQUEST);
+        }
+        return true;
     }
 
 }

@@ -141,15 +141,15 @@ describe('CategoriesController (e2e)', () => {
             await request(app.getHttpServer()).post('/categories').set('Authorization', `Bearer ${authTokenAdmin}`).send(categoryData6).expect(HttpStatus.CREATED);
             const category = (await request(app.getHttpServer()).get(`/categories/name/${categoryData6.categoryName}`).expect(HttpStatus.OK));
             const categoryId = category.body.categoryId;
-            request(app.getHttpServer()).delete(`/categories/${categoryId}`).set('Authorization', `Bearer ${authTokenAdmin}`).expect(HttpStatus.OK);
-            request(app.getHttpServer()).get(`/categories/name/${categoryData6.categoryName}`).expect(HttpStatus.NOT_FOUND);
+            await request(app.getHttpServer()).delete(`/categories/${categoryId}`).set('Authorization', `Bearer ${authTokenAdmin}`).expect(HttpStatus.OK);
+            await request(app.getHttpServer()).get(`/categories/id/${categoryId}`).expect(HttpStatus.NOT_FOUND);
         });
         it('should delete category by id', async () => {
             await request(app.getHttpServer()).post('/categories').set('Authorization', `Bearer ${authTokenRoot}`).send(categoryData7).expect(HttpStatus.CREATED);
             const category = (await request(app.getHttpServer()).get(`/categories/name/${categoryData7.categoryName}`).expect(HttpStatus.OK));
             const categoryId = category.body.categoryId;
-            request(app.getHttpServer()).delete(`/categories/${categoryId}`).set('Authorization', `Bearer ${authTokenRoot}`).expect(HttpStatus.OK);
-            request(app.getHttpServer()).get(`/categories/name/${categoryData7.categoryName}`).expect(HttpStatus.NOT_FOUND);
+            await request(app.getHttpServer()).delete(`/categories/${categoryId}`).set('Authorization', `Bearer ${authTokenRoot}`).expect(HttpStatus.OK);
+            await request(app.getHttpServer()).get(`/categories/id/${categoryId}`).expect(HttpStatus.NOT_FOUND);
         });
         it('should not delete category by id', async () => {
             return request(app.getHttpServer()).delete(`/categories/${1}`).set('Authorization', `Bearer ${authTokenUser}`).expect(HttpStatus.FORBIDDEN);
@@ -163,12 +163,12 @@ describe('CategoriesController (e2e)', () => {
         const entityManager = app.get<EntityManager>(EntityManager);
         const category = await entityManager.findOne(Category, {
             where: {
-                categoryName: categoryData.categoryName
+                categoryName: updateCategoryData.newCategoryName
             }
         });
         const category2 = await entityManager.findOne(Category, {
             where: {
-                categoryName: categoryData4.categoryName
+                categoryName: updateCategoryData2.newCategoryName
             }
         });
         if (category) {

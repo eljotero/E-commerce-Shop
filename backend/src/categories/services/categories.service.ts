@@ -86,7 +86,7 @@ export class CategoriesService {
             if (!category) {
                 throw new HttpException('There is no category with such id', HttpStatus.NOT_FOUND);
             }
-            await entityManager.remove(category);
-        })
+            await entityManager.remove(Category, category);
+        });
     }
 }

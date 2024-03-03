@@ -101,11 +101,11 @@ describe('ProductsController (e2e)', () => {
     };
 
     const updateProductData2 = {
-        productName: 'testProduct8',
+        productName: 'testProduct9',
         productDescription: 'test productdescription',
         productPrice: 44.99,
         productWeight: 55.22,
-        categoryName: 'test'
+        categoryName: 'food'
     };
 
     beforeEach(async () => {
@@ -210,17 +210,18 @@ describe('ProductsController (e2e)', () => {
         it('should update product by id', async () => {
             const product = (await request(app.getHttpServer()).get(`/products/name/${productData10.productName}`)).body;
             const productID = product.productId;
-            const res = request(app.getHttpServer()).put(`/products/${productID}`).set('Authorization', `Bearer ${authTokenRoot}`).send(updateProductData);
+            const res = request(app.getHttpServer()).put(`/products/${productID}`).set('Authorization', `Bearer ${authTokenRoot}`).send(updateProductData2);
             const resBody = (await res).body;
             res.expect(HttpStatus.OK);
-            expect(updateProductData.categoryName).toEqual(resBody.category.categoryName);
-            expect(updateProductData.productWeight).toEqual(resBody.productWeight);
-            expect(updateProductData.productPrice).toEqual(resBody.productPrice);
-            expect(updateProductData.productPrice).toEqual(resBody.productPrice);
-            expect(updateProductData.productDescription).toEqual(resBody.productDescription);
-            expect(updateProductData.productName).toEqual(resBody.productName);
+            expect(updateProductData2.categoryName).toEqual(resBody.category.categoryName);
+            expect(updateProductData2.productWeight).toEqual(resBody.productWeight);
+            expect(updateProductData2.productPrice).toEqual(resBody.productPrice);
+            expect(updateProductData2.productPrice).toEqual(resBody.productPrice);
+            expect(updateProductData2.productDescription).toEqual(resBody.productDescription);
+            expect(updateProductData2.productName).toEqual(resBody.productName);
         });
         it('should not update product by id', async () => {
+            updateProductData2.categoryName = 'test';
             const product = (await request(app.getHttpServer()).get(`/products/name/${updateProductData.productName}`)).body;
             const productID = product.productId;
             return request(app.getHttpServer()).put(`/products/${productID}`).set('Authorization', `Bearer ${authTokenAdmin}`).send(updateProductData2).expect(HttpStatus.NOT_FOUND);
@@ -257,12 +258,12 @@ describe('ProductsController (e2e)', () => {
         const entityManager = app.get<EntityManager>(EntityManager);
         const product = await entityManager.findOne(Product, {
             where: {
-                productName: productData.productName
+                productName: updateProductData.productName
             }
         });
         const product2 = await entityManager.findOne(Product, {
             where: {
-                productName: productData10.productName
+                productName: updateProductData2.productName
             }
         });
         if (product) {

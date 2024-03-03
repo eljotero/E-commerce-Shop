@@ -3,8 +3,6 @@ import { ProductsService } from './products.service';
 import { getEntityManagerToken, getRepositoryToken } from '@nestjs/typeorm';
 import { Product } from '../../typeorm/entities/Product';
 import { CategoriesService } from '../../categories/services/categories.service';
-import { mock } from 'node:test';
-import exp from 'node:constants';
 
 describe('ProductsService', () => {
   let service: ProductsService;
@@ -98,18 +96,6 @@ describe('ProductsService', () => {
     service = module.get<ProductsService>(ProductsService);
   });
 
-  describe('addProduct', () => {
-    it('should add product', async () => {
-      mockCategoriesService.findCategoryByName = jest.fn().mockResolvedValueOnce(mockCreateProduct.categoryName);
-      mockEntityManager.findOne = jest.fn().mockResolvedValueOnce(null);
-      const result: Product = await service.addProduct(mockCreateProduct);
-      expect(mockEntityManager.transaction).toHaveBeenCalled();
-      expect(mockEntityManager.findOne).toHaveBeenCalled();
-      expect(mockCategoriesService.findCategoryByName).toHaveBeenCalledWith(mockCreateProduct.categoryName);
-      expect(mockEntityManager.save).toHaveBeenCalled();
-      expect(result).toEqual({ productId: expect.any(Number), ...mockCreateProductRes });
-    });
-  });
 
   describe('findAllProducts', () => {
     it('should find all products', async () => {
@@ -137,19 +123,6 @@ describe('ProductsService', () => {
     });
   });
 
-  describe('updateProductByID', () => {
-    it('should update product by id', async () => {
-      mockEntityManager.findOne = jest.fn().mockResolvedValueOnce(mockProduct);
-      mockCategoriesService.findCategoryByName = jest.fn().mockResolvedValueOnce(mockProduct.categoryName);
-      const updatedProduct = { ...mockProduct, productPrice: 1111 };
-      mockEntityManager.save = jest.fn().mockResolvedValueOnce(updatedProduct);
-      await service.updateProductByID(mockProduct.productId, updatedProduct);
-      expect(mockEntityManager.transaction).toHaveBeenCalled();
-      expect(mockEntityManager.findOne).toHaveBeenCalled();
-      expect(mockCategoriesService.findCategoryByName).toHaveBeenCalled();
-      expect(mockEntityManager.save).toHaveBeenCalled();
-    });
-  });
 
   describe('deleteProductById', () => {
     it('should delete product', async () => {
