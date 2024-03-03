@@ -1,7 +1,5 @@
-
-
 .NavbarContainer {
-    margin-top: 50px;
+    margin-top: 50px; 
     display: flex;
     justify-content: space-around;
     text-align: center;
@@ -10,17 +8,16 @@
     width: 100%;
 }
 
-.NavbarSectionCenter .NavbarSectionLeft .NavbarSectionRight {
-    display: flex;
-    justify-content: space-evenly;
+.NavbarSectionLeft, .NavbarSectionRight, .NavbarSectionCenter {
+    width: 500px;
 }
 
-.NavbarSectionCenter span {
-    position: relative;
+/* .NavbarSectionCenter span {
+    position: flex;
     font-size: 35px;
     text-transform: uppercase;
     font-family: 'Roboto', monospace;
-}
+} */
 
 .NavbarSectionLeft button, .NavbarSectionRight button {
     position: relative;
@@ -55,5 +52,26 @@
 
 }
 
+.waviy {
+    position: relative;
+    font-size: 40px;
+}
+
+.waviy span {
+    position: relative;
+    display: inline-block;
+    text-transform: uppercase;
+    animation: waviy 1s infinite;
+    animation-delay: calc(.1s * var(--i));
+}
+
+  @keyframes waviy {
+    0%,40%,100% {
+      transform: translateY(0)
+    }
+    20% {
+      transform: translateY(-20px)
+    }
+  }
 
 

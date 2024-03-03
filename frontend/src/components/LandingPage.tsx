@@ -8,7 +8,7 @@ function LandingPage() {
         <>
             <Promocode />
             <Navbar />
-            
+
         </>
     );
 
