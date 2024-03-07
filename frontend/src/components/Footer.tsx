@@ -6,7 +6,7 @@ function Footer() {
     return (
         <footer className="FooterContainer">
             <div className="FooterSectionTitle">
-                <span>Sweet<br/>Treats</span>
+                <span>Sweet<br />Treats</span>
             </div>
             <div className="FooterSectionLeft">
                 <button>Instagram</button>

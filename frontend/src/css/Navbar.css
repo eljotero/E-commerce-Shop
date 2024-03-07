@@ -1,38 +1,49 @@
 .NavbarContainer {
-    margin-top: 50px; 
     display: flex;
     justify-content: space-around;
     text-align: center;
     align-items: center;
-    background-color: #fff;
+    background-color: #FFEED8;
     width: 100%;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
-.NavbarSectionLeft, .NavbarSectionRight, .NavbarSectionCenter {
+.NavbarSectionLeft,
+.NavbarSectionRight,
+.NavbarSectionCenter {
     width: 500px;
 }
 
-/* .NavbarSectionCenter span {
+.NavbarSectionCenter span {
     position: flex;
-    font-size: 35px;
+    font-size: 32px;
     text-transform: uppercase;
-    font-family: 'Roboto', monospace;
-} */
-
-.NavbarSectionLeft button, .NavbarSectionRight button {
-    position: relative;
-    font-size: 20px;
-    text-transform: uppercase;
-    font-family: 'Roboto', monospace;
-    margin-inline: 20px;
-    border: none;
-    cursor: pointer;
-    background-color: #fff;
+    font-family: logoFont;
 }
 
-.SearchButton, .AccountButton, .CartButton{
-    width: 24px;
-    height: 24px;
+.NavbarSectionLeft button,
+.NavbarSectionRight button {
+    position: relative;
+    font-size: 25px;
+    text-transform: uppercase;
+    font-family: 'Roboto', monospace;
+    margin-inline: 15px;
+    border: none;
+    cursor: pointer;
+    background-color: #FFEED8;
+    font-family: logoFont;
+}
+
+button:hover {
+    color: #FF9916;
+}
+
+.SearchButton,
+.AccountButton,
+.CartButton {
+    width: 30px;
+    height: 30px;
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
@@ -44,12 +55,10 @@
 
 .AccountButton {
     background-image: url('../assets/account.ico');
-
 }
 
 .CartButton {
     background-image: url('../assets/cart.ico');
-
 }
 
 .waviy {
@@ -62,16 +71,21 @@
     display: inline-block;
     text-transform: uppercase;
     animation: waviy 5s infinite linear;
-    animation-delay: calc(.1s * var(--i));
+    animation-delay: calc(.2s * var(--i));
 }
 
-  @keyframes waviy {
-    0%, 20% {
-      transform: translateY(0)
+@keyframes waviy {
+    0%,
+    20% {
+        transform: translateY(0)
     }
+
     10% {
-      transform: translateY(-20px)
+        transform: translateY(-15px)
     }
-  }
+}
 
-
+@font-face {
+    font-family: logoFont;
+    src: url(../assets/fonts/FridayNightRegular-0W9z4.ttf);
+}
