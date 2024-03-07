@@ -1,0 +1,22 @@
+
+
+.HeroSectionContainer {
+    margin-top: 50px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.HeroSectionContainer span {
+    width: 790px;
+    height: 175px;
+    font-size: 72px;
+    font-family: 'Roboto', monospace;
+    text-align: center;
+    font-weight: 700;
+}
+
+Footer {
+    display: flex;
+    align-items: bottom;
+}

@@ -1,0 +1,91 @@
+.NavbarContainer {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    align-items: center;
+    background-color: #FFEED8;
+    width: 100%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.NavbarSectionLeft,
+.NavbarSectionRight,
+.NavbarSectionCenter {
+    width: 500px;
+}
+
+.NavbarSectionCenter span {
+    position: flex;
+    font-size: 32px;
+    text-transform: uppercase;
+    font-family: logoFont;
+}
+
+.NavbarSectionLeft button,
+.NavbarSectionRight button {
+    position: relative;
+    font-size: 25px;
+    text-transform: uppercase;
+    font-family: 'Roboto', monospace;
+    margin-inline: 15px;
+    border: none;
+    cursor: pointer;
+    background-color: #FFEED8;
+    font-family: logoFont;
+}
+
+button:hover {
+    color: #FF9916;
+}
+
+.SearchButton,
+.AccountButton,
+.CartButton {
+    width: 30px;
+    height: 30px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+.SearchButton {
+    background-image: url('../assets/search.ico');
+}
+
+.AccountButton {
+    background-image: url('../assets/account.ico');
+}
+
+.CartButton {
+    background-image: url('../assets/cart.ico');
+}
+
+.waviy {
+    position: relative;
+    font-size: 40px;
+}
+
+.waviy span {
+    position: relative;
+    display: inline-block;
+    text-transform: uppercase;
+    animation: waviy 5s infinite linear;
+    animation-delay: calc(.2s * var(--i));
+}
+
+@keyframes waviy {
+    0%,
+    20% {
+        transform: translateY(0)
+    }
+
+    10% {
+        transform: translateY(-15px)
+    }
+}
+
+@font-face {
+    font-family: logoFont;
+    src: url(../assets/fonts/FridayNightRegular-0W9z4.ttf);
+}

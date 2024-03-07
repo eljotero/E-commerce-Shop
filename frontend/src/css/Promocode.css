@@ -1,0 +1,37 @@
+
+.PromoCodeContainer {
+    background-color: #FF9916;
+    text-align: center;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    border: black 2px solid;
+}
+
+.PromoCodeText {
+    display: inline-block;
+    margin-left: 40px;
+    font-size: 24px;
+    font-family: 'Roboto', monospace;
+    animation: move 10s linear infinite;
+}
+
+.ClosePromoCodeNotification {
+    position: absolute;
+    left: 10px;
+    font-size: 20px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.ClosePromoCodeNotification:hover {
+    color: red;
+}
+
+@keyframes move {
+    0% { transform: translateX(200%); }
+    100% { transform: translateX(-200%); }
+}
