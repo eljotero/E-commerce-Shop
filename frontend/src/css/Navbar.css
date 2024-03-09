@@ -3,15 +3,16 @@
     justify-content: space-around;
     text-align: center;
     align-items: center;
-    background-color: #FFEED8;
-    width: 100%;
-    padding-top: 5px;
-    padding-bottom: 5px;
+    height: 22vh;
+    background-image: url('../assets/svg/navbar.svg');
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 .NavbarSectionLeft,
 .NavbarSectionRight,
 .NavbarSectionCenter {
+    margin-top: -50px;
     width: 500px;
 }
 
@@ -31,12 +32,14 @@
     margin-inline: 15px;
     border: none;
     cursor: pointer;
-    background-color: #FFEED8;
+    background-color: transparent;
     font-family: logoFont;
+    text-decoration-color: transparent;
+    transition: 0.5s;
 }
 
-button:hover {
-    color: #FF9916;
+.NavbarSectionLeft button:hover, .NavbarSectionRight:hover {
+    text-decoration: underline;
 }
 
 .SearchButton,
@@ -55,6 +58,11 @@ button:hover {
 
 .AccountButton {
     background-image: url('../assets/account.ico');
+    transition: 0.1s;
+}
+
+.AccountButton:hover {
+    background-image: url('../assets/account-hover.ico');
 }
 
 .CartButton {

@@ -18,6 +18,7 @@
 
 .productCenterSection {
     align-self: center;
+    width: fit-content;
 }
 
 .productNameSpan, .productPriceSpan {
@@ -28,43 +29,108 @@
 
 .productPriceSpan {
     font-size: 25px;
+    margin-right: 2%;
 }
 
-img, .addToCartButton {
+.productPricePerKgSpan {
+    font-size: 12px;
+}
+
+.productPriceContainer {
+    margin-bottom: 5%;
+}
+
+img {
     margin: 5px;
     border-radius: 10px;
+    border: black solid 2px;
 }
 
+.mainPicture {
+    width: 450px;
+    height: 475px;
+}
+
+
 .addToCartButton {
+    text-decoration-color: transparent;
     margin-top: 5%;
     width: 100%;
     height: 50px;
-    background-color: #FFEED8;
+    border-radius: 10px;
+    background-color: #F36A3E;
     color: black;
     font-weight: bold;
     border: none;
     cursor: pointer;
+    box-shadow: 5px 5px rgba(139, 47, 47, 0.7);
+    transition: 0.5s;
 }
 
 .addToCartButton:hover {
-    color: #FF9916;
+    box-shadow: none;
+    text-decoration: underline;
+    animation: rollShadow 0.5s ;
 }
 
+.addToCartButton:focus {
+    outline: none;
+}
 .productQuantityContainer {
     align-items: center;
-    justify-content: space-evenly;
-    font-size: 20px;
 }
 
 input {
-    width: 400px;
-    height:30px;
+    width: 90px;
+    height: 30px;
+    font-size: 20px;
     text-align: center;
-    border-width: 3px;
-    font-size: 15px;
-    box-shadow: 3px 3px;
+    border: none;
+    border: black solid 1px; 
 }
 
 input:focus {
-    outline: none;
+    outline: none; 
+}
+
+.minus, .plus{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 34px;
+    font-size: 30px;
+    height: 34px;
+    background-color: #F36A3E;
+    font-size: large;
+    color: black;
+    cursor: pointer;
+    border: black solid 1px;
+    font-size: 30px;
+}
+
+.roundedDivider {
+    width: 90%;
+    border-top: 8px solid #FD9827;
+    border-radius: 5px;
+}
+
+.descriptionContainer {
+    margin-top: 5%;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+@keyframes rollShadow {
+    0% { box-shadow: rgba(139, 47, 47, 0.7) 5px 5px; }
+    100% { box-shadow: rgba(139, 47, 47, 0.7) 0px 0px; }
 }

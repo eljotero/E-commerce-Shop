@@ -27,7 +27,7 @@ import { RolesGuard } from './auth/guards/roles.guard';
       port: 5432,
       username: 'postgres',
       password: 'admin',
-      database: 'shop',
+      database: 'SweetTreatsDB',
       entities: [Category, Order, OrderedProduct, OrderStatus, Product, User, UserAddress],
       synchronize: true,
       autoLoadEntities: true,

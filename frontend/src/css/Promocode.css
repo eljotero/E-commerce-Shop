@@ -1,13 +1,12 @@
 
 .PromoCodeContainer {
-    background-color: #FF9916;
+    background-color: #F36A3E;
     text-align: center;
     align-items: center;
     justify-content: space-between;
     padding: 10px;
     white-space: nowrap;
     overflow: hidden;
-    border: black 2px solid;
 }
 
 .PromoCodeText {
