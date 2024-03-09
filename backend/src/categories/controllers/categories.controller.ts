@@ -12,8 +12,8 @@ export class CategoriesController {
 
     constructor(private categoriesService: CategoriesService) { }
 
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles(UserRoles.Admin, UserRoles.Root)
+    //@Roles(UserRoles.Admin)
+    //@UseGuards(JwtAuthGuard)
     @UsePipes()
     @Post()
     createCategory(@Body(new ValidationPipe()) createCategoryDto: CreateCategoryDto) {

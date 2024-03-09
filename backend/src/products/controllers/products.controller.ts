@@ -11,8 +11,8 @@ import { RolesGuard } from '../../auth/guards/roles.guard';
 export class ProductsController {
     constructor(private productsService: ProductsService) { }
 
-    @Roles(UserRoles.Admin, UserRoles.Root)
-    @UseGuards(JwtAuthGuard, RolesGuard)
+    //@Roles(UserRoles.Admin)
+    //@UseGuards(JwtAuthGuard)
     @Post()
     @UsePipes()
     createProduct(@Body(new ValidationPipe()) createProductDto: CreateProductDto) {

@@ -8,6 +8,8 @@ async function bootstrap() {
   app.use(helmet);
   app.enableCors();
   app.use(csurf());
+  app.enableCors(); // Enable CORS for all routes
   await app.listen(3000);
+
 }
 bootstrap();

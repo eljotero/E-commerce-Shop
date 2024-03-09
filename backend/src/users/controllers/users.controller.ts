@@ -12,12 +12,13 @@ import { CreateAdminDto } from '../dtos/CreateAdmin.dto';
 export class UsersController {
     constructor(private userService: UsersService) { }
 
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles(UserRoles.Admin, UserRoles.Root)
+    //@Roles(UserRoles.Admin)
+    //@UseGuards(JwtAuthGuard)
     @Get()
     getUsers() {
         return this.userService.findUsers();
     }
+
 
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(UserRoles.Admin, UserRoles.User, UserRoles.Root)
