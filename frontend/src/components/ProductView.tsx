@@ -39,6 +39,7 @@ function ProductView() {
       <Promocode />
       <Navbar />
       {/* TODO: Category navigation for product */}
+      {/* Może jednak nie wymaga zmiany response, zobaczymy jak z czasem*/}
       <div className="productContainer">
         <div className="productLeftSection">
           <img alt="Picture" src="https://picsum.photos/200/150" />
@@ -46,7 +47,7 @@ function ProductView() {
           <img alt="Picture" src="https://picsum.photos/200/150" />
         </div>
         <div className="productCenterSection">
-          <img className='mainPicture' alt="Picture" src="https://www.limi.pl/4164-large_default/haribo-zelki-zlote-misie-100g.jpg" />
+          <img className='mainPicture' alt="Picture" src="https://picsum.photos/200/480" />
         </div>
         <div className="producRightSection">
           <span className="productNameSpan">{product.productName}</span>
@@ -67,10 +68,11 @@ function ProductView() {
       </div>
       <hr className="roundedDivider"/>
       <div className="descriptionContainer">
-        <span>{product.productDescription}</span>
-      </div>  
-      <br />
+        <span className="descriptionHeader">Description:</span>
+        <span className="descriptionText">{product.productDescription}</span>
+      </div> 
       {/* TODO: Other recommended products */}
+      {/* To podobnie nie do zrobienia bez zmiany response'a */}
 
       <Footer />
     </>
