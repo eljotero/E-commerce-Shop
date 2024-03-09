@@ -8,13 +8,13 @@ export class Order {
     @PrimaryGeneratedColumn()
     orderId: number
 
-    @Column({default: new Date() })
+    @Column({ type: "timestamp with time zone", default: () => "CURRENT_TIMESTAMP" })
     orderDate: Date;
 
-    @Column({type: "numeric" })
+    @Column({ type: "numeric" })
     totalPrice: number;
 
-    @Column({type: 'numeric' })
+    @Column({ type: 'numeric' })
     totalWeight: number;
 
     @ManyToOne(() => OrderStatus, orderStatus => orderStatus.orders)

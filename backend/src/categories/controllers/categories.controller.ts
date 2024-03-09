@@ -5,6 +5,7 @@ import { JwtAuthGuard } from '../../auth/guards/jwt.guard';
 import { Roles } from '../../auth/decorators/roles.decorator';
 import { UserRoles } from '../../auth/enums/user-roles';
 import { UpdateCategoryDto } from '../dtos/UpdateCategory.dto';
+import { RolesGuard } from '../../auth/guards/roles.guard';
 
 @Controller('categories')
 export class CategoriesController {
@@ -34,15 +35,15 @@ export class CategoriesController {
         return this.categoriesService.findCategoryByName(name);
     }
 
-    @Roles(UserRoles.Admin)
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(UserRoles.Admin, UserRoles.Root)
     @Put(':id')
     updateCategory(@Param('id', ParseIntPipe) id: number, @Body(new ValidationPipe()) updateCategoryDto: UpdateCategoryDto) {
         return this.categoriesService.updateCategoryById(id, updateCategoryDto);
     }
 
-    @Roles(UserRoles.Admin)
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(UserRoles.Admin, UserRoles.Root)
     @Delete(':id')
     deleteCategory(@Param('id', ParseIntPipe) id: number) {
         return this.categoriesService.deleteCategoryById(id);

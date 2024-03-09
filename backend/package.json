@@ -17,7 +17,8 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "test:e2e:watch": "jest --config ./test/jest-e2e.json --watch"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
@@ -30,7 +31,10 @@
     "bcrypt": "^5.1.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
+    "cors": "^2.8.5",
+    "csurf": "^1.11.0",
     "date-fns-tz": "^2.0.0",
+    "helmet": "^7.1.0",
     "nest-access-control": "^3.1.0",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
