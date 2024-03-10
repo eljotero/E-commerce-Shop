@@ -4,6 +4,12 @@ import Footer from "./Footer";
 import "../css/LandingPage.css";
 
 function LandingPage() {
+
+  function navigateTo(path: string) { 
+    window.location.href = path;
+  }
+
+
   return (
     <>
       <Promocode />
@@ -11,7 +17,9 @@ function LandingPage() {
       <div className="HeroSectionContainer">
         <span>Explore a world of sweet delights</span>
       </div>
-      <div></div>
+      <div>
+        <button className="ShopNowButton" onClick={() =>navigateTo('/shop')}>Shop Now</button>
+      </div>
       <Footer />
     </>
   );

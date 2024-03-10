@@ -14,6 +14,7 @@
 .NavbarSectionCenter {
     margin-top: -50px;
     width: 500px;
+    cursor: pointer;
 }
 
 .NavbarSectionCenter span {

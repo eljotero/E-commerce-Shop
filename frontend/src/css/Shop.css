@@ -1,0 +1,27 @@
+.shopContainer
+{
+    display: flex;
+    flex-direction: row;
+    margin-top: 5vh;
+}
+
+.productsContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(20vw, 1fr));
+    width: 60vw;
+    align-self: center;
+    margin-left: 10vw;
+}
+
+.productCard {
+    width: 20vw;
+    height: 30vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+}

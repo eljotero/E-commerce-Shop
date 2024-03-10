@@ -1,14 +1,19 @@
 import '../css/Navbar.css'
 
 function Navbar() {
+
+    function navigateTo(path: string) { 
+        window.location.href = path;
+      }
+
     return (
         <div className='NavbarContainer'>
             <div className='NavbarSectionLeft'>
-                <button>SHOP</button>
-                <button>ABOUT US</button>
-                <button>CONTACT</button>
+                <button onClick={() => navigateTo('/shop')}>SHOP</button>
+                <button onClick={() => navigateTo('/about')}>ABOUT US</button>
+                <button onClick={() => navigateTo('/contact')}>CONTACT</button>
             </div>
-            <div className='NavbarSectionCenter'>
+            <div onClick={() => navigateTo('/')}className='NavbarSectionCenter'>
                 <div className="waviy">
                     <span style={{ '--i': 1 } as React.CSSProperties}>S</span>
                     <span style={{ '--i': 2 } as React.CSSProperties}>W</span>
