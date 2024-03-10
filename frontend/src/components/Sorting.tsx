@@ -32,11 +32,21 @@ function Sorting() {
           })}
         </div>
         <div className='priceRollDown'>
+          <label>Price:</label>
           <div className='priceInput'>
-            <label>Sort by price:</label>
-            <button>Price</button>
+            <input type='text' placeholder='Min'></input>
+            <input type='text' placeholder='Max'></input>
           </div>
         </div>
+        <div className='weightRollDown'>
+          <label>Weight:</label>
+          <div className='weightInput'>
+            <input className='minPrice' type='text' placeholder='Min'></input>
+            <input className='maxPrice' type='text' placeholder='Max'></input>
+          </div>
+        </div>
+
+        <button className='searchButton'>Search</button>
       </div>
   );
 }
