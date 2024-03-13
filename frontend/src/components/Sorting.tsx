@@ -1,5 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import type { RootState } from '../redux/store';
+import { useSelector, useDispatch  } from 'react-redux';
+import { setCategories, setMinPrice, setMaxPrice, setMinWeight, setMaxWeight } from '../redux/filter';
 import '../css/Sorting.css';
 
 function Sorting() {
@@ -9,6 +12,7 @@ function Sorting() {
       categoryName: ''
     }
   ]);
+  const [selectedCategories, setSelectedCategories] = useState(new Set<number>());
 
   useEffect(() => {
     axios.get(`http://localhost:3000/categories`)
@@ -20,33 +24,67 @@ function Sorting() {
       });
   }, []);
 
+  function handleCategoryChange(categoryId: number, isChecked: boolean) {
+    setSelectedCategories(prev => {
+      const newSelected = new Set(prev);
+      if (isChecked) {
+        newSelected.add(categoryId);
+      } else {
+        newSelected.delete(categoryId);
+      }
+      return newSelected;
+    });
+  }
+
+  const dispatch = useDispatch()
+
+  function setFilters() {
+    let minPrice = document.querySelector('.minPrice') as HTMLInputElement;
+    let maxPrice = document.querySelector('.maxPrice') as HTMLInputElement;
+    let minWeight = document.querySelector('.minWeight') as HTMLInputElement;
+    let maxWeight = document.querySelector('.maxWeight') as HTMLInputElement;
+    const categoriesToSend = categories.filter(category => selectedCategories.has(category.categoryId));
+
+    dispatch(setCategories(categoriesToSend));
+    dispatch(setMinPrice(parseInt(minPrice.value)));
+    dispatch(setMaxPrice(parseInt(maxPrice.value)));
+    dispatch(setMinWeight(parseInt(minWeight.value)));
+    dispatch(setMaxWeight(parseInt(maxWeight.value)));  
+    console.log(categoriesToSend);
+  }
 
   return (
       <div className='categorySortingContainer'>
         <div className='categoriesRollDown'>
-          {categories.map((category) => {
-            return <div className = 'categoriesCheckboxes'>
-              <label>{category.categoryName}</label>
-              <input type='checkbox' key={category.categoryId}></input>
-            </div>
-          })}
+        {categories.map((category) => (
+          <div className='categoriesList' key={category.categoryId}>
+            <ul className='categoriesCheckboxes'>
+              <li>
+                <input 
+                  type='checkbox' 
+                  onChange={(e) => handleCategoryChange(category.categoryId, e.target.checked)}/>
+                  <label>{category.categoryName}</label>
+              </li>
+            </ul>
+          </div>
+          ))}
         </div>
         <div className='priceRollDown'>
           <label>Price:</label>
           <div className='priceInput'>
-            <input type='text' placeholder='Min'></input>
-            <input type='text' placeholder='Max'></input>
+            <input className='minPrice' type='text' placeholder='Min'></input>
+            <input className='maxPrice' type='text' placeholder='Max'></input>
           </div>
         </div>
         <div className='weightRollDown'>
           <label>Weight:</label>
           <div className='weightInput'>
-            <input className='minPrice' type='text' placeholder='Min'></input>
-            <input className='maxPrice' type='text' placeholder='Max'></input>
+            <input className='minWeight' type='text' placeholder='Min'></input>
+            <input className='maxWeight' type='text' placeholder='Max'></input>
           </div>
         </div>
 
-        <button className='searchButton'>Search</button>
+        <button className='searchButton' onClick={() => setFilters()}>Search</button>
       </div>
   );
 }

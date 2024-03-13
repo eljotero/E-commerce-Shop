@@ -8,17 +8,20 @@ import "../css/Shop.css";
 
 function ShopView() {
 
-  const [products, setProducts] = useState([
-    {
-    productName: "",
-    productDescription: "",
-    productPrice: 0,
-    productWeight: 0,
-    category: {
-        categoryName: ""
-      }
-    }
-  ]);
+  interface Category {
+    categoryId: number;
+    categoryName: string;
+  }
+  
+  interface Product {
+    category: Category;
+    productPrice: number;
+    productWeight: number;
+    productId: string;
+    productName: string;
+  }
+
+  const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
     axios.get(`http://localhost:3000/products`)
@@ -40,42 +43,38 @@ function ShopView() {
     window.location.href = `/product/${id}`;
   }
 
-  function sortProductsByCategory(category: string) {
-      console.log(category);
-      console.log(products);
-      const filteredProducts = products.filter((product: any) => product.category.categoryName === category);
-      setVisibleProducts(filteredProducts);
+  function filterProductsByCategory(category: string) {
+    const filteredProducts = products.filter((product: Product) => product.category.categoryName === category);
+    setVisibleProducts(filteredProducts);
   }
-
-  function sortProductsByPrice() {
-      const sortedProducts = products.sort((a: any, b: any) => a.productPrice - b.productPrice);
-      setVisibleProducts(sortedProducts);
+  
+  function filterProductsByPrice() {
+    const sortedProducts = [...products].sort((a: Product, b: Product) => a.productPrice - b.productPrice);
+    setVisibleProducts(sortedProducts);
   }
-
-  function sortProductsByWeight() {
-      const sortedProducts = products.sort((a: any, b: any) => a.productWeight - b.productWeight);
-      setVisibleProducts(sortedProducts);
+  
+  function filterProductsByWeight() {
+    const sortedProducts = [...products].sort((a: Product, b: Product) => a.productWeight - b.productWeight);
+    setVisibleProducts(sortedProducts);
   }
 
   return (
     <>
-        <Promocode />
-        <Navbar />
-        <div className="shopContainer">
-          <Sorting/>
-          <div className="productsContainer">
-              {visibleProducts.map((product: any) => {
-                  return (
-                      <div key={product.productId} className="productCard" onClick={() => goToProductPage(product.productId)}>
-                          <img alt="Picture" src="https://picsum.photos/200/150" />
-                          <h3>{product.productName}</h3>
-                          <p>{product.productPrice} PLN</p>
-                      </div>
-                  );
-              })}
-          </div>
+      <Promocode />
+      <Navbar />
+      <div className="shopContainer">
+        <Sorting/>
+        <div className="productsContainer">
+          {visibleProducts.map((product: any) => (
+            <div key={product.productId} className="productCard" onClick={() => goToProductPage(product.productId)}>
+              <img alt="Picture" src="https://picsum.photos/200/150" />
+              <h3>{product.productName}</h3>
+              <p>{product.productPrice} PLN</p>
+            </div>
+          ))}
         </div>
-        <Footer />
+      </div>
+      <Footer />
     </>
   );
 }

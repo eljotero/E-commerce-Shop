@@ -1,6 +1,7 @@
 .categorySortingContainer
 {
     width: 12vw;
+    height: 100%;
     display: flex;
     flex-direction: column;
     position: relative;
@@ -10,18 +11,12 @@
     border-radius: 15px;
 }
 
-.categoriesCheckboxes
-{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-bottom: 1vh;
-    margin-top: 1vh;
-}
+.categoriesList {
+    width: 100%;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
 
-.categoriesCheckboxes label
-{
-    width: 55%;
 }
 
 .priceInput, .weightInput {
@@ -31,21 +26,17 @@
 }
 
 .priceInput input, .weightInput input{
-    
     border: 1px solid #e0e0e0;
     border-radius: 15px;
-    margin-bottom: 1vh;
+    margin-right: 1vw;
     margin-top: 1vh;
-}
-
-label {
-    margin-left: 1vw;
-    font-size: 2vh;
+    margin-bottom: 1vh;
 }
 
 .searchButton {
-    position: absolute;
+    position: relative;
     width: 100%;
+    margin-top: 2vh;
     bottom: 1vh;
     border-radius: 10px;
     border: none;
@@ -61,3 +52,34 @@ label {
     background-color: #e0e0e0;
     text-decoration: underline;
 }
+
+label {
+    font-size: 2vh;
+    margin-left: 1vw;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    left: 0;
+}
+
+li {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 1vw;
+}
+
+li label {
+    font-size: 2vh;
+    margin-left: 1vw;
+}
+li input {
+    width: 1vw;
+    height: 1vw;
+}
+
+
+
+

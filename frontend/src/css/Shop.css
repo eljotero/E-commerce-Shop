@@ -10,7 +10,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
-    width: 60vw;
+    width: 70%;
     align-self: center;
 }
 
