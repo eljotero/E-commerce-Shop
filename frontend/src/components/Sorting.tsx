@@ -50,7 +50,6 @@ function Sorting() {
     dispatch(setMaxPrice(parseInt(maxPrice.value)));
     dispatch(setMinWeight(parseInt(minWeight.value)));
     dispatch(setMaxWeight(parseInt(maxWeight.value)));  
-    console.log(categoriesToSend);
   }
 
   return (

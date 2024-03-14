@@ -1,6 +1,6 @@
-import Promocode from "./Promocode";
-import Navbar from "./Navbar";
-import Footer from "./Footer";
+import Promocode from "../components/Promocode";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 import "../css/Product.css";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";

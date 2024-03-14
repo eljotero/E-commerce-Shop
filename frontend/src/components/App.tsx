@@ -1,9 +1,9 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import LandingPage from './LandingPage';
-import ShopView from './ShopView';
-import ProductView from './ProductView';
-import AboutUs from './AboutUs';
-import Contact from './Contact';
+import LandingPage from '../pages/LandingPage';
+import ShopView from '../pages/ShopView';
+import ProductView from '../pages/ProductView';
+import AboutUs from '../pages/AboutUs';
+import Contact from '../pages/Contact';
 
 function App() {
     return (

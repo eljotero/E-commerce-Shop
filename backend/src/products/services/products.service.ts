@@ -60,7 +60,8 @@ export class ProductsService {
             {
                 select: {
                     category: {
-                        categoryName: true
+                        categoryName: true,
+                        categoryId: true
                     }
                 },
                 relations: {

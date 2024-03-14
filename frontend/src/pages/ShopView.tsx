@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect} from "react";
 import axios from "axios";
-import Promocode from "./Promocode";
-import Navbar from "./Navbar";
-import Sorting from "./Sorting";
-import Footer from "./Footer";
+import { useSelector } from 'react-redux';
+import type { RootState } from '../redux/store';
+import Promocode from "../components/Promocode";
+import Navbar from "../components/Navbar";
+import Sorting from "../components/Sorting";
+import Footer from "../components/Footer";
 import "../css/Shop.css";
 
 function ShopView() {
@@ -27,6 +29,7 @@ function ShopView() {
     axios.get(`http://localhost:3000/products`)
       .then(response => {
         setProducts(response.data);
+        console.log(products);
       })
       .catch(error => {
         console.log(error);
@@ -43,20 +46,31 @@ function ShopView() {
     window.location.href = `/product/${id}`;
   }
 
-  function filterProductsByCategory(category: string) {
-    const filteredProducts = products.filter((product: Product) => product.category.categoryName === category);
+  const filters = useSelector((state: RootState) => state.filters);
+
+  useEffect(() => {
+    const filteredProducts = products.filter((product: Product) => {
+      if (filters.categories.length > 0 && !filters.categories.find((category: Category) => category.categoryId === product.category.categoryId)){
+        return false;
+      }
+      if (filters.minPrice > 0 && product.productPrice < filters.minPrice) {
+        return false;
+      }
+      if (filters.maxPrice > 0 && product.productPrice > filters.maxPrice) {
+        return false;
+      }
+      if (filters.minWeight > 0 && product.productWeight < filters.minWeight) {
+        return false;
+      }
+      if (filters.maxWeight > 0 && product.productWeight > filters.maxWeight) {
+        return false;
+      }
+      return true;
+    });
+
     setVisibleProducts(filteredProducts);
-  }
-  
-  function filterProductsByPrice() {
-    const sortedProducts = [...products].sort((a: Product, b: Product) => a.productPrice - b.productPrice);
-    setVisibleProducts(sortedProducts);
-  }
-  
-  function filterProductsByWeight() {
-    const sortedProducts = [...products].sort((a: Product, b: Product) => a.productWeight - b.productWeight);
-    setVisibleProducts(sortedProducts);
-  }
+  }, [filters]);
+
 
   return (
     <>
