@@ -2,8 +2,8 @@ import { configureStore } from '@reduxjs/toolkit'
 import storage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore} from 'redux-persist';
 import { combineReducers } from 'redux';
-import filterReducer from './filter'
-import cartReducer from './cart'
+import filterReducer from './slicers/filterSlicer'
+import cartReducer from './slicers/cartSlicer'
 
 const persistConfig = {
   key: 'root',

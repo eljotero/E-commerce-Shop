@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useDispatch  } from 'react-redux';
-import { setCategories, setMinPrice, setMaxPrice, setMinWeight, setMaxWeight } from '../redux/filter';
+import { setCategories, setMinPrice, setMaxPrice, setMinWeight, setMaxWeight } from '../redux/slicers/filterSlicer';
 import '../css/Sorting.css';
 
 function Sorting() {
