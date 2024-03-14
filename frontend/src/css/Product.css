@@ -2,9 +2,37 @@
     display: flex;
 }
 
-.productContainer {
-    margin: 5vh;
+ul.breadcrumb {
+    list-style: none;
+    margin-top: 2vh;
+    margin-inline-start: 10vh;
     justify-content: center;
+}
+
+ul.breadcrumb li {
+    display: inline;
+    font-size: 18px;
+}
+
+ul.breadcrumb li+li:before {
+    padding: 8px;
+    color: black;
+    content: "/\00a0";
+}
+
+ul.breadcrumb li a {
+    color: #F36A3E;
+    text-decoration: none;
+}
+
+ul.breadcrumb li a:hover {
+    color: #F36A3E;
+    text-decoration: underline;
+}
+
+.productContainer {
+    margin-bottom: 5vh;
+    margin-left: 14vh;
 }
 
 .productLeftSection, .producRightSection {

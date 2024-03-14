@@ -1,8 +1,10 @@
-import Promocode from "./Promocode";
-import Navbar from "./Navbar";
-import Footer from "./Footer";
+import Promocode from "../components/Promocode";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 import "../css/Product.css";
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 function ProductView() {
   const [product, setProducts] = useState({
@@ -10,6 +12,9 @@ function ProductView() {
     productDescription: "",
     productPrice: 0,
     productWeight: 0,
+    category: {
+      categoryName: ""
+    }
   });
 
   const [quantity, setQuantity] = useState(1);
@@ -24,12 +29,19 @@ function ProductView() {
     }
   }
 
+
+  const { id } = useParams<{ id: string }>();
   useEffect(() => {
-    fetch(`http://localhost:3000/products/${1}`)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        setProducts(data);
+    axios.get(`http://localhost:3000/products/${id}`)
+      .then(response => {
+        setProducts({
+          ...response.data,
+          categoryName: response.data.category.categoryName
+        });
+        console.log(response.data);
+      })
+      .catch(error => {
+        console.log(error);
       });
   }, []);
 
@@ -38,8 +50,11 @@ function ProductView() {
     <>
       <Promocode />
       <Navbar />
-      {/* TODO: Category navigation for product */}
-      {/* Może jednak nie wymaga zmiany response, zobaczymy jak z czasem*/}
+      <ul className="breadcrumb">
+        <li><a href="#">Shop</a></li>
+        <li><a href="#">{product.category.categoryName}</a></li>
+        <li>{product.productName}</li>
+      </ul>
       <div className="productContainer">
         <div className="productLeftSection">
           <img alt="Picture" src="https://picsum.photos/200/150" />
@@ -73,7 +88,6 @@ function ProductView() {
       </div> 
       {/* TODO: Other recommended products */}
       {/* To podobnie nie do zrobienia bez zmiany response'a */}
-
       <Footer />
     </>
   );
