@@ -2,15 +2,14 @@ import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 export interface FiltersState {
-    categories: Array<{categoryId: number, categoryName
-      : string}>,
+    categories: Array<{categoryId: number, categoryName: string}>,
     minPrice: number,
     maxPrice: number,
     minWeight: number,
     maxWeight: number,
   }
   
-  const initialState: FiltersState = {
+const initialState: FiltersState = {
     categories: [],
     minPrice: 0,
     maxPrice: 0,

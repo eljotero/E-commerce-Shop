@@ -1,7 +1,8 @@
 import { useState, useEffect} from "react";
 import axios from "axios";
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from '../redux/store';
+import { addToCart } from "../redux/cart";
 import Promocode from "../components/Promocode";
 import Navbar from "../components/Navbar";
 import Sorting from "../components/Sorting";
@@ -9,7 +10,7 @@ import Footer from "../components/Footer";
 import "../css/Shop.css";
 
 function ShopView() {
-
+  const dispatch = useDispatch();
   interface Category {
     categoryId: number;
     categoryName: string;
@@ -19,7 +20,7 @@ function ShopView() {
     category: Category;
     productPrice: number;
     productWeight: number;
-    productId: string;
+    productId: number;
     productName: string;
   }
 
@@ -70,7 +71,10 @@ function ShopView() {
 
     setVisibleProducts(filteredProducts);
   }, [filters]);
+  
 
+  let windowWidth = Math.round(window.innerWidth / 7);
+  let windowHeight = Math.round(window.innerHeight / 5.5);
 
   return (
     <>
@@ -79,13 +83,16 @@ function ShopView() {
       <div className="shopContainer">
         <Sorting/>
         <div className="productsContainer">
-          {visibleProducts.map((product: any) => (
-            <div key={product.productId} className="productCard" onClick={() => goToProductPage(product.productId)}>
-              <img alt="Picture" src="https://picsum.photos/200/150" />
-              <h3>{product.productName}</h3>
+        {visibleProducts.map((product: Product) => (
+          <div key={product.productId} className="productCard">
+            <img alt="Picture" src={`https://picsum.photos/${windowWidth}/${windowHeight}`} onClick={() => goToProductPage(product.productId)} />
+            <p>{product.productName}</p>
+            <div className="buttonPriceContainer">
               <p>{product.productPrice} PLN</p>
+              <button onClick={() => dispatch(addToCart({productId: product.productId,productName: product.productName, productPrice: product.productPrice, quantity: 1}))}>Buy</button>
             </div>
-          ))}
+          </div>
+        ))}
         </div>
       </div>
       <Footer />

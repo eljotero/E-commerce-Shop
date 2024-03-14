@@ -33,7 +33,7 @@ function Navbar() {
             <div className='NavbarSectionRight'>
                 <button className='SearchButton'></button>
                 <button className='AccountButton'></button>
-                <button className='CartButton'></button>
+                <button className='CartButton' onClick={() => navigateTo('/cart')}></button>
             </div>
         </div>
     );

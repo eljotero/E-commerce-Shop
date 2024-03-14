@@ -1,12 +1,11 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import type { RootState } from '../redux/store';
-import { useSelector, useDispatch  } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useDispatch  } from 'react-redux';
 import { setCategories, setMinPrice, setMaxPrice, setMinWeight, setMaxWeight } from '../redux/filter';
 import '../css/Sorting.css';
 
 function Sorting() {
-  const [categories, setSort] = useState([
+  const [categories, getCategories] = useState([
     {
       categoryId: 0,
       categoryName: ''
@@ -17,7 +16,7 @@ function Sorting() {
   useEffect(() => {
     axios.get(`http://localhost:3000/categories`)
       .then(response => {
-        setSort(response.data);
+        getCategories(response.data);
       })
       .catch(error => {
         console.log(error);
