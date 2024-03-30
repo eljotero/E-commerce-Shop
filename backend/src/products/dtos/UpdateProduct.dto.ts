@@ -2,6 +2,10 @@ import { IsNumber, IsPositive, IsString } from "class-validator";
 
 export class UpdateProductDto {
 
+    @IsNumber({}, { message: 'Please Enter Valid ID' })
+    @IsPositive()
+    productId: number;
+
     @IsString({ message: 'Please Enter Valid Name' })
     productName: string;
 

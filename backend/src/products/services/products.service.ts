@@ -108,13 +108,32 @@ export class ProductsService {
         return product;
     }
 
-    async updateProductByID(id: number, updateProductDto: UpdateProductDto) {
+    async findProductsByCategory(categoryName: string) {
+        const category: Category = await this.categoriesService.findCategoryByName(categoryName);
+        categoryName = category.categoryName;
+        const products: Product[] = await this.productRepository.find({
+            where: {
+                category: category
+            },
+            select: {
+                category: {
+                    categoryName: true
+                }
+            },
+            relations: {
+                category: true
+            }
+        });
+        return products;
+    }
+
+    async updateProductByID(updateProductDto: UpdateProductDto) {
         return this.entityManager.transaction(async (entityManager) => {
             const productName: string = updateProductDto.productName;
             const categoryName: string = updateProductDto.categoryName;
             const product: Product = await entityManager.findOne(Product, ({
                 where: {
-                    productId: id
+                    productId: updateProductDto.productId
                 }
             }));
             if (!product) {

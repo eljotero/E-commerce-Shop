@@ -10,8 +10,8 @@ import { UserRoles } from '../../auth/enums/user-roles';
 export class ProductsController {
     constructor(private productsService: ProductsService) { }
 
-    //@Roles(UserRoles.Admin)
-    //@UseGuards(JwtAuthGuard)
+    @Roles(UserRoles.Admin)
+    // @UseGuards(JwtAuthGuard)
     @Post()
     @UsePipes()
     createProduct(@Body(new ValidationPipe()) createProductDto: CreateProductDto) {
@@ -33,11 +33,16 @@ export class ProductsController {
         return this.productsService.findProductByName(name);
     }
 
+    @Get('/category/:category')
+    getProductsByCategory(@Param('category') category: string) {
+        return this.productsService.findProductsByCategory(category);
+    }
+
     @Roles(UserRoles.Admin)
-    @UseGuards(JwtAuthGuard)
+    // @UseGuards(JwtAuthGuard)
     @Put()
     @UsePipes()
     updateProduct(@Body(new ValidationPipe()) updateProductDto: UpdateProductDto) {
-        return this.productsService.updateProduct(updateProductDto);
+        return this.productsService.updateProductByID(updateProductDto);
     }
 }

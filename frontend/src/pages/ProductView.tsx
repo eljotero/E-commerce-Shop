@@ -3,11 +3,13 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import "../css/Product.css";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";;
 import axios from "axios";
 
 function ProductView() {
+
   const [product, setProducts] = useState({
+    productId: 0,
     productName: "",
     productDescription: "",
     productPrice: 0,
@@ -16,6 +18,19 @@ function ProductView() {
       categoryName: ""
     }
   });
+
+  const [similarProducts, setSimilarProducts] = useState<similarProductsInterface[]>([]);
+
+  interface similarProductsInterface {
+    productId: number;
+    productName: string;
+    productDescription: string;
+    productPrice: number;
+    productWeight: number;
+    category: {
+      categoryName: string;
+    }
+  }
 
   const [quantity, setQuantity] = useState(1);
   let pricePerKg = ((product.productPrice / (product.productWeight * 100)) * 100).toFixed(2);
@@ -29,6 +44,10 @@ function ProductView() {
     }
   }
 
+  function goToShop() {
+    window.location.href = `/shop`;
+  }
+
 
   const { id } = useParams<{ id: string }>();
   useEffect(() => {
@@ -38,7 +57,17 @@ function ProductView() {
           ...response.data,
           categoryName: response.data.category.categoryName
         });
-        console.log(response.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    axios.get(`http://localhost:3000/products/category/${product.category.categoryName}`, {
+      params: {
+        category: product.category.categoryName
+      }
+    })
+      .then(response => {
+        setSimilarProducts(response.data);
       })
       .catch(error => {
         console.log(error);
@@ -51,7 +80,7 @@ function ProductView() {
       <Promocode />
       <Navbar />
       <ul className="breadcrumb">
-        <li><a href="#">Shop</a></li>
+        <li><a href="#" onClick={goToShop}>Shop</a></li>
         <li><a href="#">{product.category.categoryName}</a></li>
         <li>{product.productName}</li>
       </ul>
@@ -86,8 +115,21 @@ function ProductView() {
         <span className="descriptionHeader">Description:</span>
         <span className="descriptionText">{product.productDescription}</span>
       </div> 
-      {/* TODO: Other recommended products */}
-      {/* To podobnie nie do zrobienia bez zmiany response'a */}
+      <div className="similarProductsContainer">
+        <span className="similarProductsHeader">Similar products:</span>
+          <div className="similarProducts">
+            {similarProducts.map((similarProduct: similarProductsInterface) => {
+              return (
+                <div key={similarProduct.productId} className="similarProductCard">
+                  <img alt="Picture" src={`https://picsum.photos/200/150`} />
+                  <span>{similarProduct.productName}</span>
+                  <span>{similarProduct.productPrice} PLN</span>
+                  <button className="addToCartButton">Add to cart</button>
+                </div>
+              );
+            })}
+        </div>
+      </div>  
       <Footer />
     </>
   );

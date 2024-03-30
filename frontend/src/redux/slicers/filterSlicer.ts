@@ -7,6 +7,7 @@ export interface FiltersState {
     maxPrice: number,
     minWeight: number,
     maxWeight: number,
+    selectedCategoryName: string,
   }
   
 const initialState: FiltersState = {
@@ -15,6 +16,7 @@ const initialState: FiltersState = {
     maxPrice: 0,
     minWeight: 0,
     maxWeight: 0,
+    selectedCategoryName: '',
   }
 
 export const filterSlice = createSlice({

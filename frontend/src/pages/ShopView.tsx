@@ -1,6 +1,7 @@
 import { useState, useEffect} from "react";
 import axios from "axios";
 import { useSelector, useDispatch } from 'react-redux';
+import { useLocation } from "react-router-dom";
 import type { RootState } from '../redux/store';
 import { addToCart } from "../redux/slicers/cartSlicer";
 import Promocode from "../components/Promocode";
@@ -23,18 +24,18 @@ function ShopView() {
     productId: number;
     productName: string;
   }
-
+  
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
     axios.get(`http://localhost:3000/products`)
-      .then(response => {
-        setProducts(response.data);
-        console.log(products);
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    .then(response => {
+      setProducts(response.data);
+      console.log(products);
+    })
+    .catch(error => {
+      console.log(error);
+    });
   }, []);
 
   const [visibleProducts, setVisibleProducts] = useState(products);
