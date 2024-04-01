@@ -1,13 +1,15 @@
 import Promocode from "../components/Promocode";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import "../css/Product.css";
+import axios from "axios";
+import { useDispatch } from 'react-redux';
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";;
-import axios from "axios";
+import "../css/Product.css";
+import { addToCart } from "../redux/slicers/cartSlicer";
 
 function ProductView() {
-
+  const dispatch = useDispatch();
   const [product, setProducts] = useState({
     productId: 0,
     productName: "",
@@ -109,7 +111,7 @@ function ProductView() {
               <button className="plus" onClick={increaseQuantity}>+</button>
             </div>
 
-          <button className="addToCartButton">Add to cart</button>
+          <button className="addToCartButton" onClick={() => dispatch(addToCart({productId: product.productId,productName: product.productName, productPrice: product.productPrice, quantity: quantity}))}>Add to cart</button>
         </div>
       </div>
       <hr className="roundedDivider"/>

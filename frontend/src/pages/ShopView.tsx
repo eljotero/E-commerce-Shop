@@ -1,7 +1,6 @@
 import { useState, useEffect} from "react";
 import axios from "axios";
 import { useSelector, useDispatch } from 'react-redux';
-import { useLocation } from "react-router-dom";
 import type { RootState } from '../redux/store';
 import { addToCart } from "../redux/slicers/cartSlicer";
 import Promocode from "../components/Promocode";
