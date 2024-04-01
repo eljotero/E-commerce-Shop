@@ -160,24 +160,34 @@ input:focus {
 }
 
 .similarProductsContainer {
-    display: inline;
+    margin: auto;
+    width: 75vw;
+}
+
+.similarProductsHeader {
+    display: flex;
+    font-size: 4vh;
+    text-align: center;
+    margin-bottom: 2vh;
+}
+
+.similarProducts {
+    display: flex;
+    width: 90%;
+    margin: auto;
+    justify-content: space-around;
+    text-align: center;
+    border: 3px solid #e0e0e0;
+    border-radius: 15px;
+    margin-bottom: 2vh;
 }
 
 .similarProductCard {
     display: inline-block;
-    margin: 2vh;
-    width: 15vw;
-    height: 30vh;
-    border-radius: 10px;
+    width: 20%;
+    height: 100%;
     transition: 0.5s;
 }
-
-.similarProductCard span {
-    font-size: 2vh;
-    text-align: center;
-    
-}
-
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {

@@ -25,13 +25,7 @@ function ProductView() {
   interface similarProductsInterface {
     productId: number;
     productName: string;
-    productDescription: string;
     productPrice: number;
-    productWeight: number;
-    category: {
-      categoryId: number;
-      categoryName: string;
-    }
   }
 
   const [quantity, setQuantity] = useState(1);
@@ -50,6 +44,9 @@ function ProductView() {
     window.location.href = `/shop`;
   }
 
+  function goToProduct(id: number) {
+    window.location.href = `/product/${id}`;
+  }
 
   const { id: idString } = useParams<{ id: string }>();
   const id = Number(idString);
@@ -71,7 +68,9 @@ function ProductView() {
   useEffect(() => { 
     axios.get(`http://localhost:3000/products/categories/${Number(product.category.categoryId)}`)
       .then(response => { 
-        setSimilarProducts(response.data);
+        setSimilarProducts(
+          response.data.filter((similarProduct: similarProductsInterface) => similarProduct.productId !== product.productId)
+        );
       })
       .catch(error => {
         console.log(error);
@@ -124,8 +123,9 @@ function ProductView() {
             {similarProducts.map((similarProduct: similarProductsInterface) => {
               return (
                 <div key={similarProduct.productId} className="similarProductCard">
-                  <img alt="Picture" src={`https://picsum.photos/200/150`} />
+                  <img alt="Picture" src={`https://picsum.photos/200/150`} onClick = {() => goToProduct(similarProduct.productId)} />
                   <span>{similarProduct.productName}</span>
+                  <br />
                   <span>{similarProduct.productPrice} PLN</span>
                 </div>
               );
