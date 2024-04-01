@@ -159,6 +159,25 @@ input:focus {
     margin-bottom: 2vh;
 }
 
+.similarProductsContainer {
+    display: inline;
+}
+
+.similarProductCard {
+    display: inline-block;
+    margin: 2vh;
+    width: 15vw;
+    height: 30vh;
+    border-radius: 10px;
+    transition: 0.5s;
+}
+
+.similarProductCard span {
+    font-size: 2vh;
+    text-align: center;
+    
+}
+
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {

@@ -15,6 +15,7 @@ function ProductView() {
     productPrice: 0,
     productWeight: 0,
     category: {
+      categoryId: 0,
       categoryName: ""
     }
   });
@@ -28,6 +29,7 @@ function ProductView() {
     productPrice: number;
     productWeight: number;
     category: {
+      categoryId: number;
       categoryName: string;
     }
   }
@@ -49,31 +51,32 @@ function ProductView() {
   }
 
 
-  const { id } = useParams<{ id: string }>();
+  const { id: idString } = useParams<{ id: string }>();
+  const id = Number(idString);
+
   useEffect(() => {
     axios.get(`http://localhost:3000/products/${id}`)
       .then(response => {
+        console.log(response.data); 
         setProducts({
           ...response.data,
-          categoryName: response.data.category.categoryName
+          category: response.data.category
         });
       })
       .catch(error => {
         console.log(error);
       });
-    axios.get(`http://localhost:3000/products/category/${product.category.categoryName}`, {
-      params: {
-        category: product.category.categoryName
-      }
-    })
-      .then(response => {
+  }, [id]);
+
+  useEffect(() => { 
+    axios.get(`http://localhost:3000/products/categories/${Number(product.category.categoryId)}`)
+      .then(response => { 
         setSimilarProducts(response.data);
       })
       .catch(error => {
         console.log(error);
       });
-  }, []);
-
+  })
 
   return (
     <>
@@ -124,7 +127,6 @@ function ProductView() {
                   <img alt="Picture" src={`https://picsum.photos/200/150`} />
                   <span>{similarProduct.productName}</span>
                   <span>{similarProduct.productPrice} PLN</span>
-                  <button className="addToCartButton">Add to cart</button>
                 </div>
               );
             })}

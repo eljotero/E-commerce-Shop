@@ -93,8 +93,10 @@ export class ProductsService {
         const product: Product = await this.productRepository.findOne({
             where: {
                 productId: productID
-            }, select: {
+            },
+            select: {
                 category: {
+                    categoryId: true,
                     categoryName: true
                 }
             },
@@ -108,15 +110,16 @@ export class ProductsService {
         return product;
     }
 
-    async findProductsByCategory(categoryName: string) {
-        const category: Category = await this.categoriesService.findCategoryByName(categoryName);
-        categoryName = category.categoryName;
+    async findProductsByCategory(categoryId: number) {
         const products: Product[] = await this.productRepository.find({
             where: {
-                category: category
+                category: {
+                    categoryId: categoryId
+                }
             },
             select: {
                 category: {
+                    categoryId: true,
                     categoryName: true
                 }
             },

@@ -33,9 +33,9 @@ export class ProductsController {
         return this.productsService.findProductByName(name);
     }
 
-    @Get('/category/:category')
-    getProductsByCategory(@Param('category') category: string) {
-        return this.productsService.findProductsByCategory(category);
+    @Get('/categories/:category')
+    getProductsByCategory(@Param('category') categoryId: number) {
+        return this.productsService.findProductsByCategory(categoryId);
     }
 
     @Roles(UserRoles.Admin)
