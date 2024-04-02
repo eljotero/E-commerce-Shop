@@ -5,6 +5,7 @@ import ProductView from '../pages/ProductView';
 import Cart from '../components/Cart';
 import AboutUs from '../pages/AboutUs';
 import Contact from '../pages/Contact';
+import Checkout from '../pages/Checkout';
 
 function App() {
     return (
@@ -15,7 +16,10 @@ function App() {
                 <Route path="/shop" element={<ShopView/>} />
                 <Route path="/about" element={<AboutUs/>} />
                 <Route path="/contact" element={<Contact/>} />
-                <Route path="/cart" element={<Cart/>} />
+                <Route path="/cart" element={<Cart isOpen={false} onClose={function (): void {
+                    throw new Error('Function not implemented.')
+                } }/>} />
+                <Route path="/checkout" element={<Checkout/>} />
             </Routes>
         </Router>
     );

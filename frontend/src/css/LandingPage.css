@@ -129,6 +129,7 @@
 }
   
 .newProductCard {
+    width: max-content;
     width: 40%; 
     border-radius: 15px;
     margin-bottom: 0;
@@ -163,4 +164,17 @@
 
 .newProductCard img:hover {
     transform: scale(1.45);
+}
+
+h3 {
+    display: flex;
+    text-align: center;
+    width: max-content;
+    margin: auto;
+}
+
+h3:hover {
+    color: #FFB30B;
+    text-decoration: underline;
+    cursor: pointer;
 }

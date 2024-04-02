@@ -14,6 +14,10 @@ function Cart({ isOpen, onClose }: CartProps) {
     const dispatch = useDispatch();
     const cart = useSelector((state: RootState) => state.cart.root);
 
+    function goToChekout() {
+        window.location.href = '/checkout';
+    }
+
     return (
         <Modal
             isOpen={isOpen}
@@ -48,7 +52,7 @@ function Cart({ isOpen, onClose }: CartProps) {
             {cart.length > 0 &&
 
                 <div className='checkoutButtonContainer'>
-                    <button className='checkoutButton'>Checkout</button>
+                    <button className='checkoutButton' onClick={goToChekout}>Checkout</button>
                 </div>
             }
         </Modal>

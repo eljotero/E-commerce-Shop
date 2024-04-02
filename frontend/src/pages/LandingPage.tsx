@@ -44,9 +44,10 @@ function LandingPage() {
           {products.map((product, index) => {
             return (
               <>
-                <div key={index} className={`newProductCard ${index % 2 === 0 ? 'right' : 'left'}`} onClick={() => navigateTo(`/product/${product.productId}`)}>
+                <div key={index} className={`newProductCard ${index % 2 === 0 ? 'right' : 'left'}`}>
                   <img alt="Picture" src="https://picsum.photos/200/150" />
-                  <h3>{product.productName}</h3>
+                  <h3 onClick={() => navigateTo(`/product/${product.productId}`)}>{product.productName}
+                  </h3>
                   <h4>${product.productPrice}</h4>
                 </div>
                 <div className={`newProductDescription ${index % 2 === 0 ? 'right' : 'left'}` }>

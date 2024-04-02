@@ -1,0 +1,108 @@
+
+.checkoutContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 90%;
+    font-family: 'Roboto', monospace;
+    margin: auto;
+}
+
+.checkoutTitle {
+    display: flex;
+    width: 100%;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    font-size: 5vh;
+    font-family: 'Roboto', monospace;
+    font-weight: 700;
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+}
+
+.checkoutItems, .checkoutInfoForm {
+    display: flex;
+    flex-direction: column;
+    width: 45%;
+    margin-bottom: 5vh;
+    background-color: #fff;
+    border: 2px solid #ccc;
+    border-radius: 15px;
+    overflow: auto;
+}
+
+.checkoutItem {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 95%;
+    border-radius: 15px;
+    padding: 2vh;
+    justify-content: space-between;
+}
+
+.span-1 {
+    width: 35%;
+    font-size: 2vh;
+}
+
+.checkoutItem button {
+    background-color: #ff6347;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+.checkoutItem button:hover {
+    background-color: #ff473d;
+}
+
+.checkoutItems,
+.checkoutInfoForm {
+    flex-basis: 45%;
+    max-height: 82vh;
+    height: max-content;
+    margin-bottom: 5vh;
+    background-color: #fff;
+    border: 2px solid #ccc;
+    border-radius: 15px;
+    overflow: auto;
+}
+
+.checkoutInfoForm form {
+    display: flex;
+    flex-direction: column;
+    padding: 5vh;
+}
+
+.checkoutInfoForm input {
+    width: 20vw;
+    padding: 1vh;
+    margin-bottom: 2vh;
+    border: 1px solid #ccc;
+    text-align: start;
+    border-radius: 5px;
+}
+
+.checkoutInfoForm label {
+    display: inline-block;
+    width: 5vw;
+    font-size: 2vh;
+    margin-bottom: 1vh;
+    margin-right: 1vw;
+}
+
+.checkoutItems h2, .checkoutInfoForm h2{
+    display: flex;
+    margin: auto;
+    margin-bottom: 2vh;
+    margin-top: 2vh;
+    font-size: 3vh;
+    font-weight: 700;
+}
+
+
