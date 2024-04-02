@@ -1,10 +1,18 @@
+import { useState } from 'react';
+import Cart from './Cart';
 import '../css/Navbar.css'
 
 function Navbar() {
 
+    const [isCartVisible, setCartVisible] = useState(false);
+
     function navigateTo(path: string) { 
         window.location.href = path;
-      }
+    }
+
+    const handleCartClick = () => {
+        setCartVisible(!isCartVisible);
+    };
 
     return (
         <div className='NavbarContainer'>
@@ -33,7 +41,8 @@ function Navbar() {
             <div className='NavbarSectionRight'>
                 <button className='SearchButton'></button>
                 <button className='AccountButton'></button>
-                <button className='CartButton' onClick={() => navigateTo('/cart')}></button>
+                <button className='CartButton' onClick={handleCartClick}></button>
+                {isCartVisible && <Cart isOpen={isCartVisible} onClose={() => setCartVisible(false)} />}
             </div>
         </div>
     );
