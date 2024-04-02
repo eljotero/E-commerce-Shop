@@ -122,6 +122,7 @@ function ProductView() {
       <div className="similarProductsContainer">
         <span className="similarProductsHeader">Similar products:</span>
           <div className="similarProducts">
+            
             {similarProducts.map((similarProduct: similarProductsInterface) => {
               return (
                 <div key={similarProduct.productId} className="similarProductCard">

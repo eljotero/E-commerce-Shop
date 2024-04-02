@@ -94,7 +94,7 @@ function ShopView() {
           </div>
         ))}
         </div>
-      </div>
+      </div> 
       <Footer />
     </>
   );

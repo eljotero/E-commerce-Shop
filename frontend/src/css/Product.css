@@ -180,6 +180,7 @@ input:focus {
     border: 3px solid #e0e0e0;
     border-radius: 15px;
     margin-bottom: 2vh;
+    padding: 15px;
 }
 
 .similarProductCard {
@@ -187,6 +188,15 @@ input:focus {
     width: 20%;
     height: 100%;
     transition: 0.5s;
+}
+
+.similarProductCard img {
+    transition: transform 0.5s;
+    margin-bottom: 2vh;
+}
+
+.similarProductCard img:hover {
+    transform: scale(1.2);
 }
 
 input::-webkit-outer-spin-button,
